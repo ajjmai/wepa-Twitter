@@ -25,6 +25,6 @@ public class Comment extends AbstractPersistable<Long> {
     private Tweet tweet;
 
     @ManyToOne
-    private User owner;
+    private Account owner;
 
 }

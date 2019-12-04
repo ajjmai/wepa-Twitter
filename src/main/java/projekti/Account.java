@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class User extends AbstractPersistable<Long> {
+public class Account extends AbstractPersistable<Long> {
     private String userName;
     private String name;
     private String password;

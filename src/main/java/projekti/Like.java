@@ -25,5 +25,5 @@ public class Like extends AbstractPersistable<Long> {
     private LocalDateTime liked;
 
     @ManyToOne
-    private User owner;
+    private Account owner;
 }

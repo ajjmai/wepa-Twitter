@@ -22,7 +22,7 @@ public class Tweet extends AbstractPersistable<Long> {
     private LocalDateTime posted;
 
     @ManyToOne
-    private User owner;
+    private Account owner;
 
     @OneToMany(mappedBy = "tweet")
     private List<Comment> comments = new ArrayList<>();

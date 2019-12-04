@@ -30,7 +30,7 @@ public class Photo extends AbstractPersistable<Long> {
     private Boolean profilePic;
 
     @ManyToOne
-    private User owner;
+    private Account owner;
 
     @OneToMany(mappedBy = "photo")
     private List<Comment> comments = new ArrayList<>();
