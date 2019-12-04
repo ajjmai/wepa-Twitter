@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>My Twitter Application</title>
+</head>
+
+<body>
+
+    <h1>Welcome to My Twitter Application!</h1>
+
+    <h2>Register</h2>
+    <form th:action="@{/register}" th:object="${account}" method="POST">
+        <table>
+            <tr>
+                <td>Username: </td>
+                <td><input type="text" th:field="*{username}" /></td>
+                <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</td>
+            </tr>
+            <tr>
+                <td>Password: </td>
+                <td><input type="text" th:field="*{password}" /></td>
+                <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</td>
+            </tr>
+            <tr>
+                <td>Name: </td>
+                <td><input type="text" th:field="*{name}" /></td>
+                <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</td>
+            </tr>
+            <tr>
+                <td>Choose an address to your profile: </td>
+                <td><input type="text" th:field="*{profileString}" /></td>
+                <td th:if="${#fields.hasErrors('profileString')}" th:errors="*{profileString}">Profilestring error</td>
+            </tr>
+            <tr>
+                <td><button type="submit">Submit</button></td>
+            </tr>
+        </table>
+    </form>
+
+
+    <h2><a th:href="@{/login}">Sign in</a></h2>
+
+
+</body>
+
+</html>

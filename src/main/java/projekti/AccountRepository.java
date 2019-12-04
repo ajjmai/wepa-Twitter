@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    List<Account> findByName(String name);
+    Account findByName(String name);
 
-    List<Account> findByUsername(String userName);
+    Account findByUsername(String username);
 
-    List<Account> findByProfileString(String profileString);
+    Account findByProfileString(String profileString);
 }
