@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>My Twitter Application</title>
+</head>
+
+<body>
+
+    <h1>Welcome to My Twitter Application!</h1>
+
+    <h2>Register</h2>
+    <form id="register" action="/users" method="POST">
+        Username: <input type="text" name="name" id="name" /><br />
+        Password: <input type="text" name="password" id="password" /><br />
+        Profile address string: <input type="text" name="profilestring" id="profilestring" /><br />
+        <input type="submit" />
+    </form>
+
+
+    <h2>Sign in</h2>
+    <form id="sign_in" action="/" method="POST">
+        Username: <input type="text" name="name" id="name" /><br />
+        Password: <input type="text" name="password" id="password" /><br />
+        <input type="submit" />
+    </form>
+
+
+</body>
+
+</html>
