@@ -16,14 +16,14 @@ import lombok.NoArgsConstructor;
 @Data
 public class Like extends AbstractPersistable<Long> {
 
-    @ManyToOne
-    private Photo photo;
+    // @ManyToOne
+    // private Photo photo;
 
-    @ManyToOne
-    private Tweet tweet;
+    // @ManyToOne
+    // private Tweet tweet;
 
     private LocalDateTime liked;
 
-    @ManyToOne
-    private Account owner;
+    // @ManyToOne
+    // private Account owner;
 }

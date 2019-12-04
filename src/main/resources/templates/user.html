@@ -10,12 +10,23 @@
 
     <h1 th:text="${user.name}">name</h1>
     <!-- profile pic -->
+    <!-- tweets -->
+    <ul>
+        <li th:each="tweet: ${tweets}">
+            <p th:text="${tweet.owner.username}">username</p>
+            <p th:text="${tweet.content}">description</p>
+            <p th:text="${tweet.posted}">datetime</p>
+        </li>
+    </ul>
 
-    <li th:each="tweet : ${user.tweet}">
-
-
-    </li>
-
+    <div sec:authorize="isAuthenticated()">
+        <h2>Tweet</h2>
+        <form th:action="@{/users/${user.profileString}}" method="POST">
+            <input type="text" name="content" />
+            <input type="hidden" name="username" th:value="${user.username}" />
+            <input type="submit" value="TWEET" />
+        </form>
+    </div>
 
 
 </body>

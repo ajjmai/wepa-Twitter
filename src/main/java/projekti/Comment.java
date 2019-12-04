@@ -18,13 +18,13 @@ public class Comment extends AbstractPersistable<Long> {
     private String content;
     private LocalDateTime posted;
 
-    @ManyToOne
-    private Photo photo;
+    // @ManyToOne
+    // private Photo photo;
 
-    @ManyToOne
-    private Tweet tweet;
+    // @ManyToOne
+    // private Tweet tweet;
 
-    @ManyToOne
-    private Account owner;
+    // @ManyToOne
+    // private Account owner;
 
 }
