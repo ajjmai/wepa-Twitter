@@ -14,28 +14,28 @@
                 <label for="username">
                     Username:
                 </label> 
-                <input type="text" class="form-control" th:field="*{username}" placeholder="Enter username" />
+                <input type="text" class="form-control" th:field="*{username}" placeholder="Enter username" required/>
                 <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</p>
             </div>
             <div class="form-group">
                 <label for="password">
                     Password:
                 </label> 
-                <input type="text" class="form-control" th:field="*{password}" placeholder="Enter password" />
+                <input type="text" class="form-control" th:field="*{password}" placeholder="Enter password" required/>
                 <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</p>
             </div>
             <div class="form-group">
                     <label for="name">
                         Name:
                     </label> 
-                    <input type="text" class="form-control" th:field="*{name}" placeholder="Enter name"/>
+                    <input type="text" class="form-control" th:field="*{name}" placeholder="Enter name" required/>
                     <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</p>
             </div>
             <div class="form-group">
                 <label for="profileString">
                     Your home page address, your home page will be in www.myTwitter.com/users/[your address]:
                 </label> 
-                <input type="text" class="form-control" th:field="*{profileString}" placeholder="Enter home page address"/>
+                <input type="text" class="form-control" th:field="*{profileString}" placeholder="Enter home page address" required/>
                 <p th:if="${#fields.hasErrors('profileString')}" th:errors="*{profileString}">Profilestring error</p>
             </div>
             <button type="submit" class="btn btn-primary">Register</button></td>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/basic :: head('My twitter - ' + ${user.username})">
+<head th:replace="fragments/basic :: head('My Twitter - ' + ${user.username})">
 </head>
 
 <body>
@@ -19,19 +19,25 @@
     </div>
     <!-- profile pic -->
     <!-- tweets -->
-    <ul>
-        <li th:each="tweet: ${tweets}">
-            <p th:text="${tweet.owner.username}">username</p>
-            <p th:text="${tweet.content}">description</p>
-            <p th:text="${tweet.posted}">datetime</p>
-        </li>
-    </ul>
+        <div class="card-columns" th:each="tweet: ${tweets}">
+            <div class="card">
+                <div class="card-header">
+                        <div style="float:left; width:30%" th:text="${tweet.owner.username}">text</div>
+                        <div style="float:left; width: 40%; margin-left: 30px" th:text="${#temporals.format(tweet.posted, 'dd-MM-yyyy HH:mm')}">header</div>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title" th:text="${tweet.content}">description</h3>
+                    <button class="btn btn-danger">Like</button>
+                    <button class="btn btn-info">Comment</button>
+                </div>
+            </div>
+        </div>
 
     <div class="container" sec:authorize="isAuthenticated()">
         <h2>What's up?</h2>
         <form th:action="@{/users/${user.profileString}}" method="POST">
             <div class="form-group">
-                <input type="text" name="content" class="form-control"/>
+                <input type="text" name="content" class="form-control" required/>
             </div>
             <div class="form-group">
                 <input type="hidden" name="username" th:value="${user.username}" class="form-control"/>
@@ -40,7 +46,7 @@
         </form>
     </div>
 
-
+    <div th:replace="fragments/basic ::footer"></div> 
 </body>
 
 </html>
