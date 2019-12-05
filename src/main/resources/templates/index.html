@@ -3,18 +3,46 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>My Twitter Application</title>
+    <title>My Twitter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
 </head>
 
 <body>
+    <div class="jumbotron text-center" style="margin-bottom: 0">
+        <h1>Welcome to My Twitter!</h1>
+        <p>The number one social media app</p>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-6 text-center">
+                <h3><a th:href="@{/register}">Create account</a></h3>
+            </div>
+            <div class="col-6 text-center">
+                <h3><a th:href="@{/login}">Sign in</a></h3>
+            </div>
+        </div>
+    </div>
 
-    <h1>Welcome to My Twitter Application!</h1>
+    <div class="containter">
+        <div class="row">
+            <div class="col-6 text-center">
+                <h2>Trending in My Twitter</h2>
+                <ul>
+                    <li ></li>
+                </ul>
+            </div>
+            <div class="col-6 text-center">
+                <h2>Top Content Creators</h2>
+            </div>
+            
+        </div>
+    </div>
 
-    <h2><a th:href="@{/register}">Create account</a></h2>
-
-    <h2><a th:href="@{/login}">Sign in</a></h2>
-
-
+    <div class="jumbotron text-center" style="margin-bottom: 0">
+        <p>Footer</p>
+    </div> 
 </body>
 
 </html>
