@@ -36,9 +36,6 @@ public class AccountController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // @Autowired
-    // private UserDetailsService userDetailsService;
-
     @ModelAttribute
     private Account getAccount() {
         return new Account();

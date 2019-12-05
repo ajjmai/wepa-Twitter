@@ -33,7 +33,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.headers().frameOptions().sameOrigin();
 
-        http.authorizeRequests().anyRequest().authenticated().and().formLogin().permitAll().and().logout().permitAll();
+        http.authorizeRequests().antMatchers("/index").permitAll().antMatchers("/register").permitAll().and()
+                .formLogin().permitAll().and().logout().permitAll();
     }
 
     @Autowired

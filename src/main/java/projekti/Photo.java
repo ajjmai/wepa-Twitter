@@ -27,10 +27,9 @@ public class Photo extends AbstractPersistable<Long> {
     private byte[] content;
 
     private String description;
-    private Boolean profilePic;
 
-    // @ManyToOne
-    // private Account owner;
+    @ManyToOne
+    private Account owner;
 
     // @OneToMany(mappedBy = "photo")
     // private List<Comment> comments = new ArrayList<>();
