@@ -1,18 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8" />
-    <title>My Twitter</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+<head th:replace="fragments/basic :: head(title='My Twitter')">
 </head>
 
 <body>
-    <div class="jumbotron text-center" style="margin-bottom: 0">
-        <h1>Welcome to My Twitter!</h1>
-        <p>The number one social media app</p>
-    </div>
+    <div th:replace="fragments/basic :: header(title='Welcome to My Twitter!', subtitle='The number one social media app!')"></div>
     
     <div class="container">
         <div class="row">
@@ -40,9 +33,7 @@
         </div>
     </div>
 
-    <div class="jumbotron text-center" style="margin-bottom: 0">
-        <p>Footer</p>
-    </div> 
+    <div th:replace="fragments/basic ::footer"></div> 
 </body>
 
 </html>

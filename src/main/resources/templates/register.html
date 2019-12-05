@@ -1,46 +1,50 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8" />
-    <title>My Twitter Application</title>
+<head th:replace="fragments/basic :: head(title='Register to My Twitter')">
 </head>
 
 <body>
+    <div th:replace="fragments/basic :: header(title='Welcome to My Twitter!', subtitle='We\'re thrilled that you want to join us!')"></div>
 
-    <h1>Welcome to My Twitter Application!</h1>
+    <div class="container">
+        <h2>Register to My Twitter</h2>
+        <form th:action="@{/register}" th:object="${account}" method="POST">
+            <div class="form-group">
+                <label for="username">
+                    Username:
+                </label> 
+                <input type="text" class="form-control" th:field="*{username}" placeholder="Enter username" />
+                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</p>
+            </div>
+            <div class="form-group">
+                <label for="password">
+                    Password:
+                </label> 
+                <input type="text" class="form-control" th:field="*{password}" placeholder="Enter password" />
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</p>
+            </div>
+            <div class="form-group">
+                    <label for="name">
+                        Name:
+                    </label> 
+                    <input type="text" class="form-control" th:field="*{name}" placeholder="Enter name"/>
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</p>
+            </div>
+            <div class="form-group">
+                <label for="profileString">
+                    Your home page address, your home page will be in www.myTwitter.com/users/[your address]:
+                </label> 
+                <input type="text" class="form-control" th:field="*{profileString}" placeholder="Enter home page address"/>
+                <p th:if="${#fields.hasErrors('profileString')}" th:errors="*{profileString}">Profilestring error</p>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button></td>
 
-    <h2>Register</h2>
-    <form th:action="@{/register}" th:object="${account}" method="POST">
-        <table>
-            <tr>
-                <td>Username: </td>
-                <td><input type="text" th:field="*{username}" /></td>
-                <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</td>
-            </tr>
-            <tr>
-                <td>Password: </td>
-                <td><input type="text" th:field="*{password}" /></td>
-                <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</td>
-            </tr>
-            <tr>
-                <td>Name: </td>
-                <td><input type="text" th:field="*{name}" /></td>
-                <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</td>
-            </tr>
-            <tr>
-                <td>Choose an address to your profile: </td>
-                <td><input type="text" th:field="*{profileString}" /></td>
-                <td th:if="${#fields.hasErrors('profileString')}" th:errors="*{profileString}">Profilestring error</td>
-            </tr>
-            <tr>
-                <td><button type="submit">Submit</button></td>
-            </tr>
-        </table>
-    </form>
+        </form>
+    </div>
+                
 
-
-    <h2><a th:href="@{/login}">Sign in</a></h2>
+    <div th:replace="fragments/basic"></div> 
 
 
 </body>
