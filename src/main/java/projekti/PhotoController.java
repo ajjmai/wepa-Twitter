@@ -55,7 +55,7 @@ public class PhotoController {
         newPhoto.setDescription(description);
         newPhoto.setOwner(account);
         photoRepository.save(newPhoto);
-        return "redirect:/users/" + profileString + "/album";
+        return "redirect:/users/" + account.getProfileString() + "/album";
     }
 
     @GetMapping(path = "/users/{profileString}/album/{id}", produces = "image/png")

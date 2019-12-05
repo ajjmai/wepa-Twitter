@@ -7,23 +7,26 @@
 <body>
 
     <div class="jumbotron text-center">
-        <h1 th:text="${user.username}">name</h1>
+        <h1> My Twitter </h1>
+        <h2><span th:text="${user.username}">name</span></h2>
     </div>
 
     <!-- <h2><a th:href="@{/users/${user.profileString}/album}/">Photo album</a></h2> -->
 
-    
+
 
     <div>
         <!-- <img /> -->
     </div>
     <!-- profile pic -->
     <!-- tweets -->
-        <div class="card-columns" th:each="tweet: ${tweets}">
-            <div class="card">
+    <div class="container">
+        <div class="card-deck">
+            <div class="card border-primary" th:each="tweet: ${tweets}">
                 <div class="card-header">
-                        <div style="float:left; width:30%" th:text="${tweet.owner.username}">text</div>
-                        <div style="float:left; width: 40%; margin-left: 30px" th:text="${#temporals.format(tweet.posted, 'dd-MM-yyyy HH:mm')}">header</div>
+                    <p class="card-text"> <span th:text="${tweet.owner.username}">poster</span> <small
+                            class="text-muted" th:text="${#temporals.format(tweet.posted, 'dd-MM-yyyy HH:mm')}">header</small> </p>
+                        
                 </div>
                 <div class="card-body">
                     <h3 class="card-title" th:text="${tweet.content}">description</h3>
@@ -32,6 +35,7 @@
                 </div>
             </div>
         </div>
+    </div>
 
     <div class="container" sec:authorize="isAuthenticated()">
         <h2>What's up?</h2>

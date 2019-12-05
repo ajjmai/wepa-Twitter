@@ -1,47 +1,40 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-  <head
-    th:replace="fragments/basic :: head('My Twitter Album - ' + ${user.username})"
-  >
-  </head>
 
-  <body>
+<head th:replace="fragments/basic :: head('My Twitter Album - ' + ${user.username})">
+</head>
+
+<body>
     <!-- <h2><a th:href="@{/users}/${user.profileString}">Back to user home page</a></h2> -->
 
     <div class="jumbotron text-center">
-      <h1>My Twitter Album - <span th:text="${user.username}">name</span></h1>
+        <h1>My Twitter Album</h1>
+        <h2><span th:text="${user.username}">name</span></h2>
+        <h2><span th:text="${user.profileString}">name</span></h2>
     </div>
     <!-- profile pic -->
 
-    <div class="containter">
-      <!-- <div th:each="photo: ${photos}" class="card-deck"> -->
-      <div class="card-deck">
-        <div class="card">
-          <img class="card-img-top" src="" alt="" />
-          <div class="card-body">
-            <p>description</p>
-            <!-- <p class="card-text" th:text="${photo.description}">description</p> -->
-            <button class="btn btn-danger">Like</button>
-            <!-- show likes amount -->
-            <button
-            type="button"
-              data-toggle="collapse"
-              data-target="#comment-form"
-              class="btn btn-info"
-            >
-              Comment
-            </button>
-            <div id="comment-form" class="collapse">
-              <form>
-                <div class="form-group">
-                  <input
-                    type="text"
-                    name="comment"
-                    class="form-control"
-                    required
-                  />
+    <div class="containter" style="margin: 10%;">
+        <div class="card-deck">
+            <div th:each="photo: ${photos}" class="card" style="max-width: 50%; min-width: 20%;">
+                <img class="card-img-top"
+                    th:src="@{/users/{profileString}/album/{id}(profileString=${user.profileString}, id=${photo.id}) }"
+                    alt="" />
+                <div class="card-body">
+                    <p class="card-text" th:text="${photo.description}">description</p>
+                    <button class="btn btn-danger">Like</button>
+                    <!-- show likes amount -->
                 </div>
-                <!-- <div class="form-group">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Write a comment...</li>
+                </ul>
+                <div class="card-footer">
+                    <form>
+                        <div class="form-group">
+                            <input type="text" name="comment" class="form-control" placeholder="Comment here"
+                                required />
+                        </div>
+                        <!-- <div class="form-group">
                   <input
                     type="hidden"
                     name="username"
@@ -57,47 +50,33 @@
                     class="form-control"
                   />
                 </div> -->
-              </form>
+                        <button class="btn btn-info" type="submit">Comment</button>
+                    </form>
+                </div>
+                <!-- show max 10 comments -->
             </div>
-            <!-- show max 10 comments -->
-          </div>
         </div>
-      </div>
     </div>
 
     <div class="container" sec:authorize="isAuthenticated()">
-      <h2>Add photo</h2>
-      <form
-        th:action="@{/users/${user.profileString}/album}"
-        method="POST"
-        enctype="multipart/form-data"
-      >
-        <div class="form-group">
-          <input type="file" name="photo" required />
-        </div>
-        <div class="form-group">
-          <label for="description">Photo description</label>
-          <input
-            class="form-control"
-            type="text"
-            name="description"
-            placeholder="Enter description"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <input
-            class="form-control"
-            type="hidden"
-            name="username"
-            th:value="${user.username}"
-          />
-        </div>
+        <h2>Add photo</h2>
+        <form th:action="@{/users/${user.profileString}/album}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="file" name="photo" required />
+            </div>
+            <div class="form-group">
+                <label for="description">Photo description</label>
+                <input class="form-control" type="text" name="description" placeholder="Enter description" required />
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="hidden" name="username" th:value="${user.username}" />
+            </div>
 
-        <button type="submit" class="btn btn-primary">Add</button>
-      </form>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
     </div>
 
     <div th:replace="fragments/basic ::footer"></div>
-  </body>
+</body>
+
 </html>
