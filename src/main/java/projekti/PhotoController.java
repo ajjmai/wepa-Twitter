@@ -1,10 +1,13 @@
 package projekti;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import javax.tools.FileObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,12 @@ public class PhotoController {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private VoteRepository voteRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
     @GetMapping("/users/{profileString}/album")
     public String getPhotos(Model model, @PathVariable String profileString) {
 
@@ -36,6 +45,13 @@ public class PhotoController {
         model.addAttribute("user", account);
         model.addAttribute("photos", photoRepository.findByOwner(account));
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        if (username != null) {
+            Account auth_account = accountRepository.findByUsername(username);
+            model.addAttribute("auth_user", auth_account);
+        }
+
         return "album";
     }
 
@@ -47,6 +63,9 @@ public class PhotoController {
         Account account = accountRepository.findByUsername(username);
 
         if (account == null) {
+            return "redirect:/users/" + profileString + "/album";
+        }
+        if (photoRepository.findByOwner(account).size() >= 10) {
             return "redirect:/users/" + profileString + "/album";
         }
 
@@ -66,6 +85,82 @@ public class PhotoController {
 
     @GetMapping("/users/{profileString}/album/{id}")
     public String redirectToAlbum(@PathVariable String profileString) {
+        return "redirect:/users/" + profileString + "/album";
+    }
+
+    // vain kirjautuneet
+    @PostMapping("/users/{profileString}/album/like")
+    public String likePhoto(@PathVariable String profileString, @RequestParam Long id) {
+        Photo photo = photoRepository.getOne(id);
+
+        // user not authenticated
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        if (username == null) {
+            return "redirect:/users/" + profileString + "/album";
+        }
+
+        // no user account found
+        Account account = accountRepository.findByUsername(username);
+        if (account == null) {
+            return "redirect:/users/" + profileString + "/album";
+        }
+
+        // // cannot like one's own tweet
+        // if (account.getProfileString() == profileString) {
+        // return "redirect:/users/" + profileString + "/album";
+        // }
+
+        // already liked this tweet
+        if (voteRepository.findByOwnerAndPhoto(account, photo) != null) {
+            return "redirect:/users/" + profileString + "/album";
+        }
+
+        LocalDateTime liked = LocalDateTime.now();
+
+        Vote like = new Vote();
+
+        like.setOwner(account);
+        like.setLiked(liked);
+        like.setPhoto(photo);
+        voteRepository.save(like);
+        photo.setLikesCount(photo.getLikesCount() + 1);
+        photoRepository.save(photo);
+
+        return "redirect:/users/" + profileString + "/album";
+    }
+
+    @PostMapping("/users/{profileString}/album/comment")
+    public String commentPhoto(@PathVariable String profileString, @RequestParam Long id,
+            @RequestParam String content) {
+        Photo photo = photoRepository.getOne(id);
+        LocalDateTime posted = LocalDateTime.now();
+
+        // user not authenticated
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        if (username == null) {
+            return "redirect:/users/" + profileString + "/album";
+        }
+
+        // no user account found
+        Account account = accountRepository.findByUsername(username);
+        if (account == null) {
+            return "redirect:/users/" + profileString + "/album";
+        }
+
+        // // cannot comment one's own tweet
+        // if (account.getProfileString() == profileString) {
+        // return "redirect:/users/" + profileString;
+        // }
+
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setOwner(account);
+        comment.setPhoto(photo);
+        comment.setPosted(posted);
+        commentRepository.save(comment);
+
         return "redirect:/users/" + profileString + "/album";
     }
 }

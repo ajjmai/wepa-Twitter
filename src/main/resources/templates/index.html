@@ -1,39 +1,27 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="fragments/basic :: head(title='Meower')"> </head>
 
-<head th:replace="fragments/basic :: head(title='My Twitter')">
-</head>
+  <body>
+    <nav th:replace="fragments/basic :: nav"></nav>
 
-<body>
-    <div th:replace="fragments/basic :: header(title='Welcome to My Twitter!', subtitle='The number one social media app!')"></div>
-    
-    <div class="container">
-        <div class="row">
-            <div class="col-6 text-center">
-                <h3><a th:href="@{/register}">Create account</a></h3>
-            </div>
-            <div class="col-6 text-center">
-                <h3><a th:href="@{/login}">Sign in</a></h3>
-            </div>
+    <div
+      th:replace="fragments/basic :: header(title='Welcome to Meower!', subtitle='The number one social media app for cats!')"
+    ></div>
+
+    <div class="containter w-80">
+      <div class="row">
+        <div class="col-6 text-center">
+          <h2>Trending in Meower</h2>
         </div>
+        <div class="col-6 text-center">
+          <h2>Top Purrrrers</h2>
+        </div>
+      </div>
     </div>
 
-    <div class="containter">
-        <div class="row">
-            <div class="col-6 text-center">
-                <h2>Trending in My Twitter</h2>
-                <ul>
-                    <li ></li>
-                </ul>
-            </div>
-            <div class="col-6 text-center">
-                <h2>Top Content Creators</h2>
-            </div>
-            
-        </div>
-    </div>
+    <div th:replace="fragments/basic ::footer"></div>
 
-    <div th:replace="fragments/basic ::footer"></div> 
-</body>
-
+    <span th:replace="fragments/basic :: scripts"></span>
+  </body>
 </html>

@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -41,14 +40,14 @@ public class Account extends AbstractPersistable<Long> {
     @OneToMany(mappedBy = "owner")
     private List<Photo> photos = new ArrayList<>();
 
-    // private Photo profilePic;
-
-    // public void addProfilePic(Photo photo) {
-    // profilePic = photo;
-    // }
-
     @OneToMany(mappedBy = "owner")
     private List<Tweet> tweets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "owner")
+    private List<Vote> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "owner")
+    private List<Comment> comments = new ArrayList<>();
 
     // @ManyToMany
     // private List<User> following = new ArrayList<>();

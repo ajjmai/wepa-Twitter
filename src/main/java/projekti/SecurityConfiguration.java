@@ -3,6 +3,7 @@ package projekti;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,9 +34,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.headers().frameOptions().sameOrigin();
 
-        http.authorizeRequests().antMatchers("/index").permitAll().antMatchers("/register").permitAll().and()
-                .formLogin().permitAll().and().logout().permitAll();
+        http.authorizeRequests().antMatchers("/", "/index", "/register").permitAll()
+                .antMatchers(HttpMethod.GET, "/users/*").permitAll().antMatchers(HttpMethod.GET, "/album").permitAll()
+                .and().formLogin().permitAll().and().logout().permitAll();
+
     }
+
+    // @Override
+    // protected void configure(AuthenticationManagerBuilder auth) throws Exception
+    // {
+    // auth.inMemoryAuthentication().withUser("testi").password("kilpikonna").authorities("USER").and()
+    // .withUser("admin").password("kilpikonna").authorities("ADMIN");
+    // }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

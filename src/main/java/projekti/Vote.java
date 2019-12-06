@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import lombok.AllArgsConstructor;
@@ -14,16 +15,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Like extends AbstractPersistable<Long> {
+public class Vote extends AbstractPersistable<Long> {
 
-    // @ManyToOne
-    // private Photo photo;
+    @ManyToOne
+    private Photo photo;
 
-    // @ManyToOne
-    // private Tweet tweet;
+    @ManyToOne
+    private Tweet tweet;
 
     private LocalDateTime liked;
 
-    // @ManyToOne
-    // private Account owner;
+    // the user who liked
+    @ManyToOne
+    private Account owner;
 }

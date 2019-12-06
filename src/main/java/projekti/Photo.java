@@ -31,9 +31,13 @@ public class Photo extends AbstractPersistable<Long> {
     @ManyToOne
     private Account owner;
 
-    // @OneToMany(mappedBy = "photo")
-    // private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "photo")
+    private List<Comment> comments = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "photo")
-    // private List<Like> likes = new ArrayList<>();
+    @OneToMany(mappedBy = "photo")
+    private List<Vote> likes = new ArrayList<>();
+
+    private Integer likesCount = 0;
+
+    private Boolean profilePic = false;
 }

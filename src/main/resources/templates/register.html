@@ -5,6 +5,7 @@
 </head>
 
 <body>
+    <nav th:replace="fragments/basic :: nav"></nav>
     <div th:replace="fragments/basic :: header(title='Welcome to My Twitter!', subtitle='We\'re thrilled that you want to join us!')"></div>
 
     <div class="container">
@@ -44,8 +45,9 @@
     </div>
                 
 
-    <div th:replace="fragments/basic"></div> 
+    <div th:replace="fragments/basic :: footer"></div> 
 
+    <span th:replace="fragments/basic :: scripts"></span>
 
 </body>
 

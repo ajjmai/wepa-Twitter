@@ -1,56 +1,118 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="fragments/basic :: head('Meower - ' + ${user.username})">
+  </head>
 
-<head th:replace="fragments/basic :: head('My Twitter - ' + ${user.username})">
-</head>
-
-<body>
+  <body>
+    <nav th:replace="fragments/basic :: nav"></nav>
 
     <div class="jumbotron text-center">
-        <h1> My Twitter </h1>
-        <h2><span th:text="${user.username}">name</span></h2>
+      <h1>Meower</h1>
     </div>
 
     <!-- <h2><a th:href="@{/users/${user.profileString}/album}/">Photo album</a></h2> -->
 
-
-
-    <div>
-        <!-- <img /> -->
-    </div>
     <!-- profile pic -->
+    <div class="container w-80">
+      <!-- <img /> -->
+      <h2><span th:text="${user.username}">name</span></h2>
+    </div>
+
     <!-- tweets -->
-    <div class="container">
-        <div class="card-deck">
-            <div class="card border-primary" th:each="tweet: ${tweets}">
-                <div class="card-header">
-                    <p class="card-text"> <span th:text="${tweet.owner.username}">poster</span> <small
-                            class="text-muted" th:text="${#temporals.format(tweet.posted, 'dd-MM-yyyy HH:mm')}">header</small> </p>
-                        
-                </div>
-                <div class="card-body">
-                    <h3 class="card-title" th:text="${tweet.content}">description</h3>
-                    <button class="btn btn-danger">Like</button>
-                    <button class="btn btn-info">Comment</button>
-                </div>
-            </div>
+    <div class="container w-80" style="margin: 10%;">
+      <div class="card-deck">
+        <div
+          class="card border-primary"
+          th:each="tweet: ${tweets}"
+          style="max-width: 40%; min-width: 20%;"
+        >
+          <div class="card-header">
+            <p class="card-text">
+              <span th:text="${tweet.owner.username}">poster</span>
+              <small
+                class="text-muted"
+                th:text="${#temporals.format(tweet.posted, 'dd-MM-yyyy HH:mm')}"
+                >header</small
+              >
+            </p>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title" th:text="${tweet.content}">description</h3>
+            <form
+              sec:authorize="isAuthenticated()"
+              th:action="@{/users/{profileString}/tweets/like(profileString=${user.profileString}) }"
+              method="POST"
+            >
+              <input type="hidden" name="id" th:value="${tweet.id}" />
+              <button type="submit" class="btn btn-danger">
+                Purr
+              </button>
+              <span th:text="${tweet.likesCount}">Likes amount</span>
+              purrrs
+            </form>
+          </div>
+          <!-- TODO: show max 10 comments -->
+          <ul class="list-group list-group-flush">
+            <li
+              class="list-group-item"
+              th:each="comment, iStat : ${tweet.comments}"
+              th:unless="${iStat.index} > 9"
+            >
+              <span th:text="${comment.content}">
+                Here could be a comment...</span
+              >
+              <blockquote class="blockquote-footer">
+                <span th:text="${comment.owner.username}">name</span>
+                <span
+                  th:text="${#temporals.format(comment.posted, 'dd-MM-yyyy HH:mm')}"
+                  >date</span
+                >
+              </blockquote>
+            </li>
+          </ul>
+          <!-- TODO: vain seuraajat voivat kommentoida -->
+          <div class="card-footer" sec:authorize="isAuthenticated()">
+            <form
+              th:action="@{/users/{profileString}/tweets/comment(profileString=${user.profileString}) }"
+              method="POST"
+            >
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="content"
+                  class="form-control"
+                  placeholder="..."
+                  required
+                />
+              </div>
+              <input type="hidden" name="id" th:value="${tweet.id}" />
+              <button class="btn btn-info" type="submit">Trill</button>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
 
-    <div class="container" sec:authorize="isAuthenticated()">
-        <h2>What's up?</h2>
-        <form th:action="@{/users/${user.profileString}}" method="POST">
-            <div class="form-group">
-                <input type="text" name="content" class="form-control" required/>
-            </div>
-            <div class="form-group">
-                <input type="hidden" name="username" th:value="${user.username}" class="form-control"/>
-            </div>
-            <button type="submit" class="btn btn-primary">TWEET</button>
-        </form>
+    <div class="container w-80" sec:authorize="isAuthenticated()">
+      <h2>What's up?</h2>
+      <form th:action="@{/users/${user.profileString}}" method="POST">
+        <div class="form-group">
+          <input type="text" name="content" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <input
+            type="hidden"
+            name="username"
+            th:value="${user.username}"
+            class="form-control"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">MEOW</button>
+      </form>
     </div>
 
-    <div th:replace="fragments/basic ::footer"></div> 
-</body>
+    <div th:replace="fragments/basic ::footer"></div>
 
+    <span th:replace="fragments/basic :: scripts"></span>
+  </body>
 </html>

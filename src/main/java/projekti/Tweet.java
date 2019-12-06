@@ -26,9 +26,11 @@ public class Tweet extends AbstractPersistable<Long> {
     @ManyToOne
     private Account owner;
 
-    // @OneToMany(mappedBy = "tweet")
-    // private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "tweet")
+    private List<Comment> comments = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "tweet")
-    // private List<Like> likes = new ArrayList<>();
+    private Integer likesCount = 0;
+
+    @OneToMany(mappedBy = "tweet")
+    private List<Vote> likes = new ArrayList<>();
 }
