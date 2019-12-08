@@ -76,7 +76,8 @@ public class AccountController {
 
     @GetMapping("/users")
     public String list(Model model) {
-        return "redirect:/index";
+        model.addAttribute("users", accountRepository.findAll());
+        return "users";
     }
 
     @GetMapping("/users/{profileString}")

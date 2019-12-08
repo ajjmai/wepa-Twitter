@@ -36,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers("/", "/index", "/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/users/*").permitAll().antMatchers(HttpMethod.GET, "/album").permitAll()
-                .and().formLogin().permitAll().and().logout().permitAll();
+                .and().formLogin().permitAll().and().logout().permitAll().logoutSuccessUrl("/index");
 
     }
 

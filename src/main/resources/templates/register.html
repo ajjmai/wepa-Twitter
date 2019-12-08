@@ -6,10 +6,10 @@
 
 <body>
     <nav th:replace="fragments/basic :: nav"></nav>
-    <div th:replace="fragments/basic :: header(title='Welcome to My Twitter!', subtitle='We\'re thrilled that you want to join us!')"></div>
+    <div th:replace="fragments/basic :: header(title='Welcome to Meower!', subtitle='We\'re purrred that you want to join us!')"></div>
 
     <div class="container">
-        <h2>Register to My Twitter</h2>
+        <h2>Register to Meower</h2>
         <form th:action="@{/register}" th:object="${account}" method="POST">
             <div class="form-group">
                 <label for="username">

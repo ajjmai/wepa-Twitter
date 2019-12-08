@@ -10,12 +10,19 @@
     ></div>
 
     <div class="containter w-80">
-      <div class="row">
-        <div class="col-6 text-center">
-          <h2>Trending in Meower</h2>
-        </div>
-        <div class="col-6 text-center">
-          <h2>Top Purrrers</h2>
+      <div class="card-deck">
+        <div
+          class="card border-primary"
+          th:each="user : ${users}"
+          style="max-width: 40%; min-width: 20%;"
+        >
+          <div class="card-body">
+            <!-- profile pic or default avatar, link to profile -->
+            <p class="card-text" th:text="${user.username}">user</p>
+          </div>
+          <div class="card-footer">
+            <!-- follow button, block button -->
+          </div>
         </div>
       </div>
     </div>

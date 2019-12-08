@@ -82,10 +82,31 @@
               <button class="btn btn-info" type="submit">Trill</button>
             </form>
           </div>
+          <div class="card-footer">
+            <form
+              th:unless="${photo.profilePic}"
+              th:action="@{/users/{profileString}/album/profilepic(profileString=${user.profileString}) }"
+              method="POST"
+            >
+              <input type="hidden" name="id" th:value="${photo.id}" />
+              <button class="btn btn-info" type="submit">
+                Make profilepic
+              </button>
+            </form>
+
+            <form
+              th:action="@{/users/{profileString}/album/delete(profileString=${user.profileString}) }"
+              method="POST"
+            >
+              <input type="hidden" name="id" th:value="${photo.id}" />
+              <button class="btn btn-info" type="submit">Delete</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- TODO: vain profiilin haltija näkee -->
     <div class="container" sec:authorize="isAuthenticated()">
       <h2>Add photo</h2>
       <form

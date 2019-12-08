@@ -3,13 +3,13 @@ package projekti;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import javax.tools.FileObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +57,7 @@ public class PhotoController {
 
     // @PreAuthorize("#username ==
     // SecurityContextHolder.getContext().getAuthentication().getUsername()")
+    @Transactional
     @PostMapping("/users/{profileString}/album")
     public String savePhoto(@RequestParam("photo") MultipartFile photo, @RequestParam String description,
             @RequestParam String username, @PathVariable String profileString) throws IOException {
@@ -83,12 +84,13 @@ public class PhotoController {
         return photoRepository.getOne(id).getContent();
     }
 
-    @GetMapping("/users/{profileString}/album/{id}")
-    public String redirectToAlbum(@PathVariable String profileString) {
-        return "redirect:/users/" + profileString + "/album";
-    }
+    // @GetMapping("/users/{profileString}/album/{id}")
+    // public String redirectToAlbum(@PathVariable String profileString) {
+    // return "redirect:/users/" + profileString + "/album";
+    // }
 
     // vain kirjautuneet
+    @Transactional
     @PostMapping("/users/{profileString}/album/like")
     public String likePhoto(@PathVariable String profileString, @RequestParam Long id) {
         Photo photo = photoRepository.getOne(id);
@@ -130,6 +132,8 @@ public class PhotoController {
         return "redirect:/users/" + profileString + "/album";
     }
 
+    // vain seuraajat
+    @Transactional
     @PostMapping("/users/{profileString}/album/comment")
     public String commentPhoto(@PathVariable String profileString, @RequestParam Long id,
             @RequestParam String content) {
@@ -163,4 +167,35 @@ public class PhotoController {
 
         return "redirect:/users/" + profileString + "/album";
     }
+
+    // TODO: vain kirjautunut käyttäjä omalla sivulla
+    @Transactional
+    @PostMapping("/users/{profileString}/album/profilepic")
+    public String makeProfilePic(@PathVariable String profileString, @RequestParam Long id) {
+        Photo photo = photoRepository.getOne(id);
+
+        Account account = accountRepository.findByProfileString(profileString);
+        Photo currentProfilePic = account.getProfilePic();
+        if (currentProfilePic != null) {
+            currentProfilePic.setProfilePic(false);
+        }
+
+        account.setProfilePic(photo);
+        photo.setProfilePic(true);
+        return "redirect:/users/" + profileString + "/album";
+    }
+
+    @Transactional
+    @DeleteMapping("/users/{profileString}/album/delete")
+    public String deletePhoto(@PathVariable String profileString, @RequestParam Long id) {
+        Photo photo = photoRepository.getOne(id);
+
+        if (photo.getProfilePic()) {
+            Account account = accountRepository.findByProfileString(profileString);
+            account.setProfilePic(null);
+        }
+        photoRepository.deleteById(id);
+        return "redirect:/users/" + profileString + "/album";
+    }
+
 }
