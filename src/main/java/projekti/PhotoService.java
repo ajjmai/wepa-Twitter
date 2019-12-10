@@ -39,4 +39,14 @@ public class PhotoService {
         photo.setProfilePic(true);
     }
 
+    @Transactional
+    public void remove(Account account, Long id) {
+        Photo photo = photoRepository.getOne(id);
+        if (photo.getProfilePic()) {
+            account.setProfilePic(null);
+        }
+        
+        photoRepository.deleteById(id);
+    }
+
 }
