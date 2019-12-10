@@ -21,21 +21,24 @@ import org.springframework.web.multipart.MultipartFile;
 public class PhotoController {
 
     @Autowired
-    private PhotoRepository photoRepository;
+    private AccountService accountService;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private PhotoService photoService;
 
     @Autowired
-    private VoteRepository voteRepository;
+    private VoteService voteService;
 
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentService commentService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @GetMapping("/users/{profileString}/album")
     public String getPhotos(Model model, @PathVariable String profileString) {
 
-        Account account = accountRepository.findByProfileString(profileString);
+        Account account = accountService.getOneProfileString(profileString);
 
         // return 404
         if (account == null) {
@@ -43,12 +46,11 @@ public class PhotoController {
         }
 
         model.addAttribute("user", account);
-        model.addAttribute("photos", photoRepository.findByOwner(account));
+        model.addAttribute("photos", photoService.listByOwner(account));
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        String username = authenticationService.getUsername();
         if (username != null) {
-            Account auth_account = accountRepository.findByUsername(username);
+            Account auth_account = accountService.getOneUsername(username);
             model.addAttribute("auth_user", auth_account);
         }
 
@@ -61,12 +63,12 @@ public class PhotoController {
     @PostMapping("/users/{profileString}/album")
     public String savePhoto(@RequestParam("photo") MultipartFile photo, @RequestParam String description,
             @RequestParam String username, @PathVariable String profileString) throws IOException {
-        Account account = accountRepository.findByUsername(username);
+        Account account = accountService.getOneUsername(username);
 
         if (account == null) {
             return "redirect:/users/" + profileString + "/album";
         }
-        if (photoRepository.findByOwner(account).size() >= 10) {
+        if (photoService.listByOwner(account).size() >= 10) {
             return "redirect:/users/" + profileString + "/album";
         }
 
@@ -93,17 +95,16 @@ public class PhotoController {
     @Transactional
     @PostMapping("/users/{profileString}/album/like")
     public String likePhoto(@PathVariable String profileString, @RequestParam Long id) {
-        Photo photo = photoRepository.getOne(id);
+        Photo photo = photoService.getOneId(id);
 
         // user not authenticated
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        String username = authenticationService.getUsername();
         if (username == null) {
             return "redirect:/users/" + profileString + "/album";
         }
 
         // no user account found
-        Account account = accountRepository.findByUsername(username);
+        Account account = accountService.getOneUsername(username);
         if (account == null) {
             return "redirect:/users/" + profileString + "/album";
         }
@@ -114,7 +115,7 @@ public class PhotoController {
         // }
 
         // already liked this tweet
-        if (voteRepository.findByOwnerAndPhoto(account, photo) != null) {
+        if (voteService.getOneOwnerAndPhoto(account, photo) != null) {
             return "redirect:/users/" + profileString + "/album";
         }
 
@@ -125,7 +126,7 @@ public class PhotoController {
         like.setOwner(account);
         like.setLiked(liked);
         like.setPhoto(photo);
-        voteRepository.save(like);
+        voteService.add(like);
         photo.setLikesCount(photo.getLikesCount() + 1);
         photoRepository.save(photo);
 
@@ -137,18 +138,17 @@ public class PhotoController {
     @PostMapping("/users/{profileString}/album/comment")
     public String commentPhoto(@PathVariable String profileString, @RequestParam Long id,
             @RequestParam String content) {
-        Photo photo = photoRepository.getOne(id);
+        Photo photo = photoService.getOneId(id)
         LocalDateTime posted = LocalDateTime.now();
 
         // user not authenticated
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        String username = authenticationService.getUsername();
         if (username == null) {
             return "redirect:/users/" + profileString + "/album";
         }
 
         // no user account found
-        Account account = accountRepository.findByUsername(username);
+        Account account = accountService.getOneUsername(username);
         if (account == null) {
             return "redirect:/users/" + profileString + "/album";
         }
@@ -163,7 +163,7 @@ public class PhotoController {
         comment.setOwner(account);
         comment.setPhoto(photo);
         comment.setPosted(posted);
-        commentRepository.save(comment);
+        commentService.add(comment);
 
         return "redirect:/users/" + profileString + "/album";
     }
@@ -172,29 +172,32 @@ public class PhotoController {
     @Transactional
     @PostMapping("/users/{profileString}/album/profilepic")
     public String makeProfilePic(@PathVariable String profileString, @RequestParam Long id) {
-        Photo photo = photoRepository.getOne(id);
+        String username = this.authenticationService.getUsername();
 
-        Account account = accountRepository.findByProfileString(profileString);
-        Photo currentProfilePic = account.getProfilePic();
-        if (currentProfilePic != null) {
-            currentProfilePic.setProfilePic(false);
+        Account account = accountService.getOneProfileString(profileString);
+
+        if (username != account.getUsername()) {
+            return "redirect:/users/" + profileString + "/album";
+
         }
 
-        account.setProfilePic(photo);
-        photo.setProfilePic(true);
+        this.photoService.addProfilePic(account, id);
         return "redirect:/users/" + profileString + "/album";
     }
 
     @Transactional
     @DeleteMapping("/users/{profileString}/album/delete")
     public String deletePhoto(@PathVariable String profileString, @RequestParam Long id) {
-        Photo photo = photoRepository.getOne(id);
+        String username = this.authenticationService.getUsername();
 
-        if (photo.getProfilePic()) {
-            Account account = accountRepository.findByProfileString(profileString);
-            account.setProfilePic(null);
+        Account account = accountService.getOneProfileString(profileString);
+
+        if (username != account.getUsername()) {
+            return "redirect:/users/" + profileString + "/album";
         }
-        photoRepository.deleteById(id);
+
+        photoService.remove(account, id);
+        
         return "redirect:/users/" + profileString + "/album";
     }
 

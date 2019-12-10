@@ -14,13 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,19 +31,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AccountController {
 
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
 
     @Autowired
-    private TweetRepository tweetRepository;
+    private TweetService tweetService;
 
     @Autowired
-    private VoteRepository voteRepository;
+    private VoteService voteService;
 
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentService commentService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @ModelAttribute
     private Account getAccount() {
@@ -63,35 +64,33 @@ public class AccountController {
             return "index";
         }
 
-        if (accountRepository.findByUsername(account.getUsername()) != null) {
+        if (accountService.getOneUsername(account.getUsername()) != null) {
             return "redirect:/index";
         }
 
         String encryptedPassword = passwordEncoder.encode(account.getPassword());
 
         account.setPassword(encryptedPassword);
-        accountRepository.save(account);
+        accountService.add(account);
         return "redirect:/index";
     }
 
     @GetMapping("/users")
     public String list(Model model) {
-        model.addAttribute("users", accountRepository.findAll());
+        model.addAttribute("users", accountService.list());
         return "users";
     }
 
     @GetMapping("/users/{profileString}")
     public String getOne(Model model, @PathVariable String profileString) {
-        Account account = accountRepository.findByProfileString(profileString);
+        Account account = accountService.getOneProfileString(profileString);
         model.addAttribute("user", account);
 
-        Pageable pageable = PageRequest.of(0, 25, Sort.by("posted").descending());
-        model.addAttribute("tweets", tweetRepository.findByOwner(account, pageable));
+        model.addAttribute("tweets", tweetService.get25Tweets(account));
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        String username = authenticationService.getUsername();
         if (username != null) {
-            Account auth_account = accountRepository.findByUsername(username);
+            Account auth_account = accountService.getOneUsername(username);
             model.addAttribute("auth_user", auth_account);
         }
 
@@ -104,7 +103,7 @@ public class AccountController {
     public String newTweet(@RequestParam @NotBlank @Size(max = 160) String content,
             @RequestParam @NotBlank String username) {
 
-        Account account = accountRepository.findByUsername(username);
+        Account account = accountService.getOneUsername(username);
         if (account == null) {
             return "redirect:/index";
         }
@@ -115,14 +114,15 @@ public class AccountController {
         tweet.setOwner(account);
         tweet.setPosted(posted);
         tweet.setContent(content);
-        tweetRepository.save(tweet);
+        tweetService.add(tweet);
         return "redirect:/users/" + account.getProfileString();
     }
 
     // vain kirjautuneet
+    @Transactional
     @PostMapping("/users/{profileString}/tweets/like")
     public String likeTweet(@PathVariable String profileString, @RequestParam Long id) {
-        Tweet tweet = tweetRepository.getOne(id);
+        Tweet tweet = tweetService.getOneId(id);
 
         // user not authenticated
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -132,7 +132,7 @@ public class AccountController {
         }
 
         // no user account found
-        Account account = accountRepository.findByUsername(username);
+        Account account = accountService.getOneUsername(username);
         if (account == null) {
             return "redirect:/users/" + profileString;
         }
@@ -143,7 +143,7 @@ public class AccountController {
         // }
 
         // already liked this tweet
-        if (voteRepository.findByOwnerAndTweet(account, tweet) != null) {
+        if (voteService.getOneOwnerAndTweet(account, tweet) != null) {
             return "redirect:/users/" + profileString;
         }
 
@@ -154,9 +154,9 @@ public class AccountController {
         like.setOwner(account);
         like.setLiked(liked);
         like.setTweet(tweet);
-        voteRepository.save(like);
+        voteService.add(like);
         tweet.setLikesCount(tweet.getLikesCount() + 1);
-        tweetRepository.save(tweet);
+        tweetService.add(tweet);
 
         return "redirect:/users/" + profileString;
     }
@@ -164,18 +164,17 @@ public class AccountController {
     @PostMapping("/users/{profileString}/tweets/comment")
     public String commentTweet(@PathVariable String profileString, @RequestParam Long id,
             @RequestParam String content) {
-        Tweet tweet = tweetRepository.getOne(id);
+        Tweet tweet = tweetService.getOneId(id);
         LocalDateTime posted = LocalDateTime.now();
 
         // user not authenticated
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        String username = authenticationService.getUsername();
         if (username == null) {
             return "redirect:/users/" + profileString;
         }
 
         // no user account found
-        Account account = accountRepository.findByUsername(username);
+        Account account = accountService.getOneUsername(username);
         if (account == null) {
             return "redirect:/users/" + profileString;
         }
@@ -190,7 +189,7 @@ public class AccountController {
         comment.setOwner(account);
         comment.setTweet(tweet);
         comment.setPosted(posted);
-        commentRepository.save(comment);
+        commentService.add(comment);
 
         return "redirect:/users/" + profileString;
     }
