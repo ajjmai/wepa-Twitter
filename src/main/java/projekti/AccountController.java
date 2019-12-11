@@ -37,15 +37,6 @@ public class AccountController {
     private TweetService tweetService;
 
     @Autowired
-    private VoteService voteService;
-
-    @Autowired
-    private CommentService commentService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private AuthenticationService authenticationService;
 
     @ModelAttribute
@@ -105,13 +96,7 @@ public class AccountController {
             return "redirect:/index";
         }
 
-        LocalDateTime posted = LocalDateTime.now();
-
-        Tweet tweet = new Tweet();
-        tweet.setOwner(account);
-        tweet.setPosted(posted);
-        tweet.setContent(content);
-        tweetService.add(tweet);
+        tweetService.create(content, account);
         return "redirect:/users/" + account.getProfileString();
     }
 
@@ -122,8 +107,7 @@ public class AccountController {
         Tweet tweet = tweetService.getOneId(id);
 
         // user not authenticated
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        String username = authenticationService.getUsername();
         if (username == null) {
             return "redirect:/users/" + profileString;
         }
@@ -140,20 +124,11 @@ public class AccountController {
         // }
 
         // already liked this tweet
-        if (voteService.getOneOwnerAndTweet(account, tweet) != null) {
+        if (tweetService.getVoteOwnerAndTweet(account, tweet) != null) {
             return "redirect:/users/" + profileString;
         }
-
-        LocalDateTime liked = LocalDateTime.now();
-
-        Vote like = new Vote();
-
-        like.setOwner(account);
-        like.setLiked(liked);
-        like.setTweet(tweet);
-        voteService.add(like);
-        tweet.setLikesCount(tweet.getLikesCount() + 1);
-        tweetService.add(tweet);
+        
+        tweetService.likeTweet(tweet, account);
 
         return "redirect:/users/" + profileString;
     }
@@ -161,8 +136,7 @@ public class AccountController {
     @PostMapping("/users/{profileString}/tweets/comment")
     public String commentTweet(@PathVariable String profileString, @RequestParam Long id,
             @RequestParam String content) {
-        Tweet tweet = tweetService.getOneId(id);
-        LocalDateTime posted = LocalDateTime.now();
+              
 
         // user not authenticated
         String username = authenticationService.getUsername();
@@ -181,12 +155,7 @@ public class AccountController {
         // return "redirect:/users/" + profileString;
         // }
 
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setOwner(account);
-        comment.setTweet(tweet);
-        comment.setPosted(posted);
-        commentService.add(comment);
+        tweetService.commentTweet(content, id, account);
 
         return "redirect:/users/" + profileString;
     }
