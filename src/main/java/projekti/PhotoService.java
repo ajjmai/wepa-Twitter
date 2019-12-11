@@ -12,10 +12,6 @@ public class PhotoService {
     @Autowired
     private PhotoRepository photoRepository;
 
-    @Autowired
-    private AccountRepository accountRepository;
-
-
     public List<Photo> listByOwner(Account account) {
         return photoRepository.findByOwner(account);
     }
@@ -45,7 +41,7 @@ public class PhotoService {
         if (photo.getProfilePic()) {
             account.setProfilePic(null);
         }
-        
+
         photoRepository.deleteById(id);
     }
 

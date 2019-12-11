@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotEmpty;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import lombok.AllArgsConstructor;

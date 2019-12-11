@@ -35,6 +35,9 @@ public class PhotoController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Autowired
+    private PhotoRepository photoRepository;
+
     @GetMapping("/users/{profileString}/album")
     public String getPhotos(Model model, @PathVariable String profileString) {
 
@@ -138,7 +141,7 @@ public class PhotoController {
     @PostMapping("/users/{profileString}/album/comment")
     public String commentPhoto(@PathVariable String profileString, @RequestParam Long id,
             @RequestParam String content) {
-        Photo photo = photoService.getOneId(id)
+        Photo photo = photoService.getOneId(id);
         LocalDateTime posted = LocalDateTime.now();
 
         // user not authenticated
@@ -197,7 +200,7 @@ public class PhotoController {
         }
 
         photoService.remove(account, id);
-        
+
         return "redirect:/users/" + profileString + "/album";
     }
 

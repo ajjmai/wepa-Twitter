@@ -68,10 +68,7 @@ public class AccountController {
             return "redirect:/index";
         }
 
-        String encryptedPassword = passwordEncoder.encode(account.getPassword());
-
-        account.setPassword(encryptedPassword);
-        accountService.add(account);
+        accountService.create(account);
         return "redirect:/index";
     }
 
