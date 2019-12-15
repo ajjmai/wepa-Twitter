@@ -9,6 +9,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -19,7 +22,7 @@ public class AccountControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void noTests() {
-        // projektia varten ei ole automaattisia testejä
+    public void statusOkHomePage() throws Exception {
+        mockMvc.perform(get("/home")).andExpect(status().isOk());
     }
 }

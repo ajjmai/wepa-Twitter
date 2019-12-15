@@ -51,13 +51,15 @@ public class AccountService {
         }
     }
 
-    @Transactional
-    public void block(Account follower, Account target) {
-        Follow relationship = followRepository.findByFollowerAndTarget(follower, target);
+    // @Transactional
+    // public void block(Account follower, Account target) {
+    // Follow relationship = followRepository.findByFollowerAndTarget(follower,
+    // target);
 
-        Follow otherWayRelationship = followRepository.findByFollowerAndTarget(target, follower);
+    // Follow otherWayRelationship =
+    // followRepository.findByFollowerAndTarget(target, follower);
 
-        relationship.setBlocked(true);
-        otherWayRelationship.setBlocked(true);
-    }
+    // relationship.setBlocked(true);
+    // otherWayRelationship.setBlocked(true);
+    // }
 }
