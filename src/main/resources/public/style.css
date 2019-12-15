@@ -82,3 +82,31 @@
   align-content: center;
   margin: 5% 20% 5% 20%;
 }
+
+.follow,
+.follow a {
+  list-style-type: none;
+  color: midnightblue;
+}
+
+.jumbotron {
+  border-radius: 0;
+}
+
+.title {
+  background-color: indigo;
+  color: beige;
+}
+
+.footer {
+  background-color: midnightblue;
+}
+
+.footer p {
+  font-size: 10px;
+  color: beige;
+}
+
+.footer a {
+  color: hotpink;
+}

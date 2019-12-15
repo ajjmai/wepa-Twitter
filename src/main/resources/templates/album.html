@@ -8,12 +8,24 @@
   <body>
     <nav th:replace="fragments/basic :: nav"></nav>
 
-    <div class="jumbotron text-center">
+    <div class="jumbotron text-center title">
       <h1>Meower Album</h1>
     </div>
 
     <div class="container w80-c text-center">
-      <h2><span th:text="${user.username}">name</span></h2>
+      <div class="row">
+        <div class="col-6">
+          <h2><span th:text="${user.username}">name</span></h2>
+        </div>
+        <div class="col-6">
+          <a
+            th:href="@{/users/{profileString}(profileString=${user.profileString})}"
+            class="btn"
+            role="button"
+            >View profile</a
+          >
+        </div>
+      </div>
     </div>
 
     <div class="containter w60-c">
@@ -141,7 +153,7 @@
           />
         </div>
 
-        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="submit" class="btn">Add</button>
       </form>
     </div>
 

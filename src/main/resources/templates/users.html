@@ -18,16 +18,16 @@
         >
           <div class="card-body container">
             <div class="row">
-              <!-- profile pic or default avatar, link to profile -->
-              <div class="col-4" th:if="${user.profilePic}">
-                <img
-                  class="img-thumbnail"
-                  th:src="@{/users/{profileString}/profilepic(profileString=${user.profileString})}"
-                  alt="${user.username}-profile picture"
-                />
-              </div>
-              <div class="col-4" th:unless=${user.profilePic}>
-                
+              <div class="col-4">
+                <span th:if="${user.profilePic}"
+                  ><img
+                    class="img-thumbnail"
+                    th:src="@{/users/{profileString}/profilepic(profileString=${user.profileString})}"
+                    alt="${user.username}-profile picture"
+                /></span>
+                <span th:unless="${user.profilePic}">
+                  <img th:replace="fragments/avatar :: avatar-small" />
+                </span>
               </div>
               <div class="col-8 text-center">
                 <p class="card-text" th:text="${user.username}">user</p>

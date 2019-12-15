@@ -99,19 +99,22 @@ public class AccountController {
         return account.getProfilePic().getContent();
     }
 
-    // @PreAuthorize("#username ==
-    // SecurityContextHolder.getContext().getAuthentication().getUsername()")
     @PostMapping("/users/{profileString}")
     public String newTweet(@RequestParam @NotBlank @Size(max = 160) String content,
-            @RequestParam @NotBlank String username) {
+            @RequestParam @NotBlank String username, @PathVariable String profileString) {
 
         Account account = accountService.getOneUsername(username);
         if (account == null) {
             return "redirect:/home";
         }
 
+        String auth_user_username = authenticationService.getUsername();
+        if (account.getUsername() != auth_user_username) {
+            return "redirect:/users/" + profileString;
+        }
+
         tweetService.create(content, account);
-        return "redirect:/users/" + account.getProfileString();
+        return "redirect:/users/" + profileString;
     }
 
     // vain kirjautuneet
@@ -132,10 +135,10 @@ public class AccountController {
             return "redirect:/users/" + profileString;
         }
 
-        // // cannot like one's own tweet
-        // if (account.getProfileString() == profileString) {
-        // return "redirect:/users/" + profileString;
-        // }
+        // cannot like one's own tweet
+        if (account.getProfileString() == profileString) {
+            return "redirect:/users/" + profileString;
+        }
 
         // already liked this tweet
         if (tweetService.getVoteOwnerAndTweet(account, tweet) != null) {
@@ -163,10 +166,10 @@ public class AccountController {
             return "redirect:/users/" + profileString;
         }
 
-        // // cannot comment one's own tweet
-        // if (account.getProfileString() == profileString) {
-        // return "redirect:/users/" + profileString;
-        // }
+        // cannot comment one's own tweet
+        if (account.getProfileString() == profileString) {
+            return "redirect:/users/" + profileString;
+        }
 
         tweetService.commentTweet(content, id, account);
 

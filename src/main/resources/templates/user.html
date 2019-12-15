@@ -6,7 +6,7 @@
   <body>
     <nav th:replace="fragments/basic :: nav"></nav>
 
-    <div class="jumbotron text-center">
+    <div class="jumbotron text-center title">
       <h1>Meower</h1>
     </div>
 
@@ -26,26 +26,36 @@
           >
           <br />
           <br />
-          <form sec:authorize="isAuthenticated()" th:action="..." method="POST">
+          <form
+            sec:authorize="isAuthenticated()"
+            th:action="@{/users/{profileString}/follow(profileString=${user.profileString})}"
+            method="POST"
+          >
             <button type="submit" class="btn">
               Follow
             </button>
           </form>
         </div>
         <div class="col-6">
-          <img
-            th:if="${user.profile}"
-            class="img-thumbnail"
-            th:src="@{/users/{profileString}/profilepic(profileString=${user.profileString})}"
-            alt=""
-          />
+          <span th:if="${user.profilePic}"
+            ><img
+              class="img-thumbnail"
+              th:src="@{/users/{profileString}/profilepic(profileString=${user.profileString})}"
+              alt="${user.username}-profile picture"
+          /></span>
+          <span th:unless="${user.profilePic}">
+            <img th:replace="fragments/avatar :: avatar-big" />
+          </span>
         </div>
       </div>
     </div>
 
     <div class="container w60-c" sec:authorize="isAuthenticated()">
       <h2>What's up?</h2>
-      <form th:action="@{/users/${user.profileString}}" method="POST">
+      <form
+        th:action="@{/users/{profileString}(profileString=${profileString}) }"
+        method="POST"
+      >
         <div class="form-group">
           <input type="text" name="content" class="form-control" required />
         </div>
@@ -57,7 +67,7 @@
             class="form-control"
           />
         </div>
-        <button type="submit" class="btn btn-primary">MEOW</button>
+        <button type="submit" class="btn">MEOW</button>
       </form>
     </div>
 
@@ -137,13 +147,19 @@
         </div>
         <div class="col-2">
           <h3>Following</h3>
-          <ul th:each="target: ${user.following} ">
-            <li>Target</li>
+          <ul class="follow" th:each="target: ${user.following} ">
+            <a
+              th:href="@{/users/{profileString}(profileString=${target.target.profileString}) }"
+              ><li th:text="${target.target.username}">Target</li></a
+            >
           </ul>
 
           <h3>Followers</h3>
-          <ul th:each="target: ${user.followedBy} ">
-            <li>Target</li>
+          <ul class="follow" th:each="target: ${user.followedBy} ">
+            <a
+              th:href="@{/users/{profileString}(profileString=${target.follower.profileString}) }"
+              ><li th:text="${target.follower.username}">Followed</li></a
+            >
           </ul>
         </div>
       </div>
