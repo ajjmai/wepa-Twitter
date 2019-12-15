@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class AccountController {
@@ -66,6 +67,13 @@ public class AccountController {
     @GetMapping("/users")
     public String list(Model model) {
         model.addAttribute("users", accountService.list());
+
+        String username = authenticationService.getUsername();
+        if (username != null) {
+            Account auth_account = accountService.getOneUsername(username);
+            model.addAttribute("auth_user", auth_account);
+        }
+
         return "users";
     }
 
@@ -83,6 +91,13 @@ public class AccountController {
         }
 
         return "user";
+    }
+
+    @GetMapping(path = "/users/{profileString}/profilepic", produces = "image/png")
+    @ResponseBody
+    public byte[] getPhoto(@PathVariable String profileString) {
+        Account account = accountService.getOneProfileString(profileString);
+        return account.getProfilePic().getContent();
     }
 
     // @PreAuthorize("#username ==
@@ -127,7 +142,7 @@ public class AccountController {
         if (tweetService.getVoteOwnerAndTweet(account, tweet) != null) {
             return "redirect:/users/" + profileString;
         }
-        
+
         tweetService.likeTweet(tweet, account);
 
         return "redirect:/users/" + profileString;
@@ -136,7 +151,6 @@ public class AccountController {
     @PostMapping("/users/{profileString}/tweets/comment")
     public String commentTweet(@PathVariable String profileString, @RequestParam Long id,
             @RequestParam String content) {
-              
 
         // user not authenticated
         String username = authenticationService.getUsername();

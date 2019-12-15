@@ -16,10 +16,14 @@
           th:each="user : ${users}"
           style="max-width: 40%; min-width: 20%;"
         >
-          <div class="card-body">
-            <!-- profile pic or default avatar, link to profile -->
-            <p class="card-text" th:text="${user.username}">user</p>
-          </div>
+          <a
+            th:href="@{/users/{profileString}(profileString=${user.profileString})}"
+          >
+            <div class="card-body">
+              <!-- profile pic or default avatar, link to profile -->
+              <p class="card-text" th:text="${user.username}">user</p>
+            </div>
+          </a>
           <div class="card-footer">
             <!-- follow button, block button -->
           </div>

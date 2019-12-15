@@ -53,6 +53,9 @@ public class Account extends AbstractPersistable<Long> {
     @OneToOne
     private Photo profilePic;
 
-    // @ManyToMany
-    // private List<User> following = new ArrayList<>();
+    @OneToMany(mappedBy = "follower")
+    private List<Follow> following = new ArrayList<>();
+
+    @OneToMany(mappedBy = "target")
+    private List<Follow> followedBy = new ArrayList<>();
 }

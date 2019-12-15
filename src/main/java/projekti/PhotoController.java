@@ -89,11 +89,6 @@ public class PhotoController {
         return photoRepository.getOne(id).getContent();
     }
 
-    // @GetMapping("/users/{profileString}/album/{id}")
-    // public String redirectToAlbum(@PathVariable String profileString) {
-    // return "redirect:/users/" + profileString + "/album";
-    // }
-
     // vain kirjautuneet
     @Transactional
     @PostMapping("/users/{profileString}/album/like")
@@ -188,8 +183,7 @@ public class PhotoController {
         return "redirect:/users/" + profileString + "/album";
     }
 
-    @Transactional
-    @DeleteMapping("/users/{profileString}/album/delete")
+    @DeleteMapping("/users/{profileString}/album/{id}/delete")
     public String deletePhoto(@PathVariable String profileString, @RequestParam Long id) {
         String username = this.authenticationService.getUsername();
 

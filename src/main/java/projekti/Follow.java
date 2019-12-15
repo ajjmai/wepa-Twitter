@@ -1,30 +1,30 @@
-// package projekti;
+package projekti;
 
-// import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 
-// import javax.persistence.Entity;
-// import javax.persistence.ManyToMany;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
-// import org.springframework.data.jpa.domain.AbstractPersistable;
-// import lombok.AllArgsConstructor;
-// import lombok.Data;
-// import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.AbstractPersistable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-// @Entity
-// @NoArgsConstructor
-// @AllArgsConstructor
-// @Data
-// public class Follow extends AbstractPersistable<Long> {
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class Follow extends AbstractPersistable<Long> {
 
-// // The one who follows
-// @ManyToMany
-// private Account follower;
+    // The one who follows
+    @ManyToOne
+    private Account follower;
 
-// // The one being followed
-// @ManyToMany
-// private Account target;
+    // The one being followed
+    @ManyToOne
+    private Account target;
 
-// private LocalDateTime posted;
+    private LocalDateTime startedFollowing;
 
-// private Boolean blocked;
-// }
+    private Boolean blocked;
+}

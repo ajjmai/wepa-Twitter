@@ -42,7 +42,7 @@ public class PhotoService {
             account.setProfilePic(null);
         }
 
-        photoRepository.deleteById(id);
+        photoRepository.delete(photo);
     }
 
 }

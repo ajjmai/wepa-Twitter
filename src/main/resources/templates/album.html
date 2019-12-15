@@ -79,10 +79,10 @@
                 />
               </div>
               <input type="hidden" name="id" th:value="${photo.id}" />
-              <button class="btn btn-info" type="submit">Trill</button>
+              <button class="btn btn-info" type="submit">Comment</button>
             </form>
           </div>
-          <div class="card-footer">
+          <div class="card-footer" sec:authorize="isAuthenticated()">
             <form
               th:unless="${photo.profilePic}"
               th:action="@{/users/{profileString}/album/profilepic(profileString=${user.profileString}) }"
@@ -94,13 +94,19 @@
               </button>
             </form>
 
-            <form
-              th:action="@{/users/{profileString}/album/delete(profileString=${user.profileString}) }"
-              method="POST"
+            <!-- <form
+              th:action="@{/users/{profileString}/album/{id}/delete(profileString=${user.profileString}, id=${photo.id} ) }"
+              method="DELETE"
             >
               <input type="hidden" name="id" th:value="${photo.id}" />
-              <button class="btn btn-info" type="submit">Delete</button>
-            </form>
+              <button
+                class="btn btn-info"
+                type="submit"
+                onClick="return confirm('Are you sure?')"
+              >
+                Delete
+              </button>
+            </form> -->
           </div>
         </div>
       </div>
