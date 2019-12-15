@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -60,8 +58,6 @@ public class PhotoController {
         return "album";
     }
 
-    // @PreAuthorize("#username ==
-    // SecurityContextHolder.getContext().getAuthentication().getUsername()")
     @Transactional
     @PostMapping("/users/{profileString}/album")
     public String savePhoto(@RequestParam("photo") MultipartFile photo, @RequestParam String description,
@@ -89,7 +85,6 @@ public class PhotoController {
         return photoRepository.getOne(id).getContent();
     }
 
-    // vain kirjautuneet
     @Transactional
     @PostMapping("/users/{profileString}/album/like")
     public String likePhoto(@PathVariable String profileString, @RequestParam Long id) {
@@ -107,12 +102,12 @@ public class PhotoController {
             return "redirect:/users/" + profileString + "/album";
         }
 
-        // // cannot like one's own tweet
-        // if (account.getProfileString() == profileString) {
-        // return "redirect:/users/" + profileString + "/album";
-        // }
+        // cannot like one's own photo
+        if (account.getProfileString() == profileString) {
+            return "redirect:/users/" + profileString + "/album";
+        }
 
-        // already liked this tweet
+        // already liked this photo
         if (voteService.getOneOwnerAndPhoto(account, photo) != null) {
             return "redirect:/users/" + profileString + "/album";
         }
@@ -131,7 +126,6 @@ public class PhotoController {
         return "redirect:/users/" + profileString + "/album";
     }
 
-    // vain seuraajat
     @Transactional
     @PostMapping("/users/{profileString}/album/comment")
     public String commentPhoto(@PathVariable String profileString, @RequestParam Long id,
@@ -151,11 +145,6 @@ public class PhotoController {
             return "redirect:/users/" + profileString + "/album";
         }
 
-        // // cannot comment one's own tweet
-        // if (account.getProfileString() == profileString) {
-        // return "redirect:/users/" + profileString;
-        // }
-
         Comment comment = new Comment();
         comment.setContent(content);
         comment.setOwner(account);
@@ -166,7 +155,6 @@ public class PhotoController {
         return "redirect:/users/" + profileString + "/album";
     }
 
-    // TODO: vain kirjautunut käyttäjä omalla sivulla
     @Transactional
     @PostMapping("/users/{profileString}/album/profilepic")
     public String makeProfilePic(@PathVariable String profileString, @RequestParam Long id) {
@@ -176,7 +164,6 @@ public class PhotoController {
 
         if (username != account.getUsername()) {
             return "redirect:/users/" + profileString + "/album";
-
         }
 
         this.photoService.addProfilePic(account, id);

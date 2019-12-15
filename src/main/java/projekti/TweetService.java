@@ -22,9 +22,6 @@ public class TweetService {
     @Autowired
     private CommentRepository commentRepository;
 
-    @Autowired
-    private AccountRepository accountRepository;
-
     public List<Tweet> get25Tweets(Account account) {
         Pageable pageable = PageRequest.of(0, 25, Sort.by("posted").descending());
 

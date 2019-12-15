@@ -10,9 +10,7 @@
       <h1>Meower</h1>
     </div>
 
-    <!-- profile pic -->
     <div class="container w60-c">
-      <!-- <img /> -->
       <div class="row">
         <div class="col-6">
           <h2><span th:text="${user.username}">name</span></h2>
@@ -105,7 +103,6 @@
                 purrrs
               </form>
             </div>
-            <!-- TODO: show max 10 comments -->
             <ul class="list-group list-group-flush">
               <li
                 class="list-group-item"
@@ -124,7 +121,6 @@
                 </blockquote>
               </li>
             </ul>
-            <!-- TODO: vain seuraajat voivat kommentoida -->
             <div class="card-footer" sec:authorize="isAuthenticated()">
               <form
                 th:action="@{/users/{profileString}/tweets/comment(profileString=${user.profileString}) }"

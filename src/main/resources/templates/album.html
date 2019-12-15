@@ -55,7 +55,6 @@
               purrrs
             </form>
           </div>
-          <!-- TODO: show max 10 comments -->
           <ul class="list-group list-group-flush">
             <li
               class="list-group-item"
@@ -74,7 +73,6 @@
               </blockquote>
             </li>
           </ul>
-          <!-- TODO: vain seuraajat voivat kommentoida -->
           <div class="card-footer" sec:authorize="isAuthenticated()">
             <form
               th:action="@{/users/{profileString}/album/comment(profileString=${user.profileString}) }"
@@ -123,7 +121,6 @@
       </div>
     </div>
 
-    <!-- TODO: vain profiilin haltija näkee -->
     <div class="container w60-c" sec:authorize="isAuthenticated()">
       <h2>Add photo</h2>
       <form

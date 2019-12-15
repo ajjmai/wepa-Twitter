@@ -1,21 +1,11 @@
 package projekti;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -49,6 +39,7 @@ public class AccountController {
         return "register";
     }
 
+    // create new account
     @PostMapping("/register")
     public String newAccount(@Valid @ModelAttribute("account") Account account, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -63,6 +54,7 @@ public class AccountController {
         return "redirect:/home";
     }
 
+    // get all users
     @GetMapping("/users")
     public String list(Model model) {
         model.addAttribute("users", accountService.list());
@@ -76,6 +68,7 @@ public class AccountController {
         return "users";
     }
 
+    // get user profilepage
     @GetMapping("/users/{profileString}")
     public String getOne(Model model, @PathVariable String profileString) {
         Account account = accountService.getOneProfileString(profileString);
@@ -92,6 +85,7 @@ public class AccountController {
         return "user";
     }
 
+    // get profile picture
     @GetMapping(path = "/users/{profileString}/profilepic", produces = "image/png")
     @ResponseBody
     public byte[] getPhoto(@PathVariable String profileString) {
@@ -99,6 +93,7 @@ public class AccountController {
         return account.getProfilePic().getContent();
     }
 
+    // create new tweet
     @PostMapping("/users/{profileString}")
     public String newTweet(@RequestParam @NotBlank @Size(max = 160) String content,
             @RequestParam @NotBlank String username, @PathVariable String profileString) {
@@ -117,7 +112,7 @@ public class AccountController {
         return "redirect:/users/" + profileString;
     }
 
-    // vain kirjautuneet
+    // like tweet
     @Transactional
     @PostMapping("/users/{profileString}/tweets/like")
     public String likeTweet(@PathVariable String profileString, @RequestParam Long id) {
@@ -150,6 +145,7 @@ public class AccountController {
         return "redirect:/users/" + profileString;
     }
 
+    // comment tweet
     @PostMapping("/users/{profileString}/tweets/comment")
     public String commentTweet(@PathVariable String profileString, @RequestParam Long id,
             @RequestParam String content) {
@@ -176,6 +172,7 @@ public class AccountController {
         return "redirect:/users/" + profileString;
     }
 
+    // follow
     @PostMapping("/users/{profileString}/follow")
     public String follow(@PathVariable String profileString) {
         // user not authenticated
