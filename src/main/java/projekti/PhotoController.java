@@ -36,6 +36,7 @@ public class PhotoController {
     @Autowired
     private PhotoRepository photoRepository;
 
+    @Transactional
     @GetMapping("/users/{profileString}/album")
     public String getPhotos(Model model, @PathVariable String profileString) {
 
@@ -79,6 +80,7 @@ public class PhotoController {
         return "redirect:/users/" + account.getProfileString() + "/album";
     }
 
+    @Transactional
     @GetMapping(path = "/users/{profileString}/album/{id}", produces = "image/png")
     @ResponseBody
     public byte[] getPhoto(@PathVariable Long id, @PathVariable String profileString) {
