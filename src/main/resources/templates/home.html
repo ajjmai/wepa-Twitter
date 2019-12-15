@@ -9,13 +9,66 @@
       th:replace="fragments/basic :: header(title='Welcome to Meower!', subtitle='The number one social media app for cats!')"
     ></div>
 
-    <div class="containter w-80">
+    <div class="containter w80-c">
       <div class="row">
         <div class="col-6 text-center">
           <h2>Trending in Meower</h2>
+          <div class="card-deck">
+            <div
+              class="card"
+              th:each="tweet : ${mostRecent}"
+              style="max-width: 90%; min-width: 50%; margin: 1%; margin-left: 5%;"
+            >
+              <div class="card-header">
+                <p class="card-text">
+                  <a
+                    th:href="@{/users/{profileString}(profileString=${tweet.owner.profileString})}"
+                    ><span th:text="${tweet.owner.username}">poster</span></a
+                  >
+                  <span
+                    class="date"
+                    th:text="${#temporals.format(tweet.posted, 'dd-MM-yyyy HH:mm')}"
+                    >header</span
+                  >
+                </p>
+              </div>
+              <div class="card-body">
+                <p class="card-text" th:text="${tweet.content}">user</p>
+                <span th:text="${tweet.likesCount}">Likes amount</span>
+                purrrs
+              </div>
+            </div>
+          </div>
         </div>
         <div class="col-6 text-center">
-          <h2>Top Purrrers</h2>
+          <h2>Top Meows</h2>
+          <div class="card-deck">
+            <div
+              class="card"
+              th:each="tweet : ${mostLiked}"
+              style="max-width: 90%; min-width: 50%; margin: 1%; margin-left: 5%;"
+            >
+              <div class="card-header">
+                <p class="card-text">
+                  <a
+                    th:href="@{/users/{profileString}(profileString=${tweet.owner.profileString})}"
+                    ><span th:text="${tweet.owner.username}">poster</span></a
+                  >
+                  <span
+                    class="date"
+                    th:text="${#temporals.format(tweet.posted, 'dd-MM-yyyy HH:mm')}"
+                    >header</span
+                  >
+                </p>
+              </div>
+              <div class="card-body">
+                <!-- profile pic or default avatar, link to profile -->
+                <p class="card-text" th:text="${tweet.content}">user</p>
+                <span th:text="${tweet.likesCount}">Likes amount</span>
+                purrrs
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

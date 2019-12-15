@@ -1,6 +1,5 @@
 package projekti;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -170,6 +169,31 @@ public class AccountController {
         // }
 
         tweetService.commentTweet(content, id, account);
+
+        return "redirect:/users/" + profileString;
+    }
+
+    @PostMapping("/users/{profileString}/follow")
+    public String follow(@PathVariable String profileString) {
+        // user not authenticated
+        String username = authenticationService.getUsername();
+        if (username == null) {
+            return "redirect:/users/" + profileString;
+        }
+
+        // no user account found
+        Account account = accountService.getOneUsername(username);
+        if (account == null) {
+            return "redirect:/users/" + profileString;
+        }
+
+        // cannot follow oneself
+        Account targetAccount = accountService.getOneProfileString(profileString);
+        if (account.getUsername() == targetAccount.getUsername()) {
+            return "redirect:/users/" + profileString;
+        }
+
+        accountService.follow(account, targetAccount);
 
         return "redirect:/users/" + profileString;
     }

@@ -9,23 +9,37 @@
       th:replace="fragments/basic :: header(title='Welcome to Meower!', subtitle='The number one social media app for cats!')"
     ></div>
 
-    <div class="containter w-80">
+    <div class="containter w80-c">
       <div class="card-deck">
         <div
-          class="card border-primary"
+          class="card"
           th:each="user : ${users}"
           style="max-width: 40%; min-width: 20%;"
         >
-          <a
-            th:href="@{/users/{profileString}(profileString=${user.profileString})}"
-          >
-            <div class="card-body">
+          <div class="card-body container">
+            <div class="row">
               <!-- profile pic or default avatar, link to profile -->
-              <p class="card-text" th:text="${user.username}">user</p>
+              <div class="col-4" th:if="${user.profilePic}">
+                <img
+                  class="img-thumbnail"
+                  th:src="@{/users/{profileString}/profilepic(profileString=${user.profileString})}"
+                  alt="${user.username}-profile picture"
+                />
+              </div>
+              <div class="col-4" th:unless=${user.profilePic}>
+                
+              </div>
+              <div class="col-8 text-center">
+                <p class="card-text" th:text="${user.username}">user</p>
+
+                <a
+                  th:href="@{/users/{profileString}(profileString=${user.profileString})}"
+                  class="btn "
+                  role="button"
+                  >View profile</a
+                >
+              </div>
             </div>
-          </a>
-          <div class="card-footer">
-            <!-- follow button, block button -->
           </div>
         </div>
       </div>

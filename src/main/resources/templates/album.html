@@ -12,12 +12,11 @@
       <h1>Meower Album</h1>
     </div>
 
-    <div class="container w-80">
-      <!-- <img /> -->
+    <div class="container w80-c text-center">
       <h2><span th:text="${user.username}">name</span></h2>
     </div>
 
-    <div class="containter w-80" style="margin: 10%;">
+    <div class="containter w60-c">
       <div class="card-deck">
         <div
           th:each="photo: ${photos}"
@@ -37,7 +36,7 @@
               method="POST"
             >
               <input type="hidden" name="id" th:value="${photo.id}" />
-              <button type="submit" class="btn btn-danger">
+              <button type="submit" class="btn btn-purr">
                 Purr
               </button>
               <span th:text="${photo.likesCount}">Likes amount</span>
@@ -79,7 +78,7 @@
                 />
               </div>
               <input type="hidden" name="id" th:value="${photo.id}" />
-              <button class="btn btn-info" type="submit">Comment</button>
+              <button class="btn" type="submit">Comment</button>
             </form>
           </div>
           <div class="card-footer" sec:authorize="isAuthenticated()">
@@ -89,7 +88,7 @@
               method="POST"
             >
               <input type="hidden" name="id" th:value="${photo.id}" />
-              <button class="btn btn-info" type="submit">
+              <button class="btn " type="submit">
                 Make profilepic
               </button>
             </form>
@@ -100,7 +99,7 @@
             >
               <input type="hidden" name="id" th:value="${photo.id}" />
               <button
-                class="btn btn-info"
+                class="btn "
                 type="submit"
                 onClick="return confirm('Are you sure?')"
               >
@@ -113,7 +112,7 @@
     </div>
 
     <!-- TODO: vain profiilin haltija näkee -->
-    <div class="container" sec:authorize="isAuthenticated()">
+    <div class="container w60-c" sec:authorize="isAuthenticated()">
       <h2>Add photo</h2>
       <form
         th:action="@{/users/${user.profileString}/album}"

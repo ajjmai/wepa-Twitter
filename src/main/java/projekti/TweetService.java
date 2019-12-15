@@ -10,7 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 public class TweetService {
 
@@ -32,6 +31,22 @@ public class TweetService {
         // TO DO get also tweets by followers and extract 25 newest
 
         List<Tweet> tweets = tweetRepository.findByOwner(account, pageable);
+
+        return tweets;
+    }
+
+    public List<Tweet> get15MostLiked() {
+        Pageable pageable = PageRequest.of(0, 15, Sort.by("likesCount").descending());
+
+        List<Tweet> tweets = tweetRepository.findAll(pageable).getContent();
+
+        return tweets;
+    }
+
+    public List<Tweet> get15Newest() {
+        Pageable pageable = PageRequest.of(0, 15, Sort.by("posted").descending());
+
+        List<Tweet> tweets = tweetRepository.findAll(pageable).getContent();
 
         return tweets;
     }
@@ -81,6 +96,5 @@ public class TweetService {
         comment.setPosted(posted);
         commentRepository.save(comment);
     }
-    
 
 }

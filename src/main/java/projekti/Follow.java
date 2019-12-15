@@ -26,5 +26,5 @@ public class Follow extends AbstractPersistable<Long> {
 
     private LocalDateTime startedFollowing;
 
-    private Boolean blocked;
+    private Boolean blocked = false;
 }

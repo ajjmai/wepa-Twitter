@@ -1,0 +1,84 @@
+.navbar {
+  background-color: midnightblue;
+}
+
+.navbar .btn {
+  background-color: slateblue;
+  border-color: slateblue;
+}
+
+.card {
+  border-color: midnightblue;
+}
+
+.card-header {
+  background-color: midnightblue;
+  opacity: 0.7;
+}
+
+.card .btn {
+  opacity: 0.7;
+}
+
+.card-header a,
+.card-header p {
+  color: beige;
+}
+
+.card-header .date {
+  color: beige;
+  opacity: 0.7;
+  font-size: small;
+}
+
+.btn {
+  background-color: midnightblue;
+  border-color: midnightblue;
+  color: beige;
+}
+
+.btn:hover,
+.btn:active {
+  background-color: darkslateblue;
+  border-color: darkslateblue;
+  color: beige;
+}
+
+.btn:focus {
+  color: beige;
+  --box-shadow-color: midnightblue;
+  box-shadow: 1px 2px 3px var(--box-shadow-color);
+}
+
+.btn-purr {
+  background-color: palevioletred;
+  border-color: palevioletred;
+}
+
+.btn-purr:hover,
+.btn-purr:active {
+  background-color: purple;
+  border-color: purple;
+}
+
+.btn-purr:focus {
+  --box-shadow-color: purple;
+  box-shadow: 1px 2px 3px var(--box-shadow-color);
+}
+
+.img-thumbnail {
+  min-width: 50%;
+  max-width: 80%;
+}
+
+.w80-c {
+  max-width: 80%;
+  align-content: center;
+  margin: 5% 10% 5% 10%;
+}
+
+.w60-c {
+  max-width: 60%;
+  align-content: center;
+  margin: 5% 20% 5% 20%;
+}

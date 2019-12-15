@@ -21,6 +21,9 @@ public class DefaultController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Autowired
+    private TweetService tweetService;
+
     @GetMapping("/")
     public String homePage() {
         return "redirect:/home";
@@ -36,6 +39,10 @@ public class DefaultController {
 
         Account account = accountService.getOneUsername(username);
         model.addAttribute("auth_user", account);
+
+        model.addAttribute("mostLiked", tweetService.get15MostLiked());
+
+        model.addAttribute("mostRecent", tweetService.get15Newest());
 
         return "home";
     }
