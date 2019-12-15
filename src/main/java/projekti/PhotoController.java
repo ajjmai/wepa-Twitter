@@ -45,7 +45,7 @@ public class PhotoController {
 
         // return 404
         if (account == null) {
-            return "index";
+            return "home";
         }
 
         model.addAttribute("user", account);

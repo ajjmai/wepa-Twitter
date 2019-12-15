@@ -16,26 +16,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class DefaultController {
 
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @GetMapping("/")
     public String homePage() {
-        return "redirect:/index";
+        return "redirect:/home";
     }
 
-    @GetMapping("/index")
-    public String index(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+    @GetMapping("/home")
+    public String home(Model model) {
+        String username = authenticationService.getUsername();
         if (username == null) {
             model.addAttribute("auth_user", null);
-            return "index";
+            return "home";
         }
 
-        Account account = accountRepository.findByUsername(username);
+        Account account = accountService.getOneUsername(username);
         model.addAttribute("auth_user", account);
 
-        return "index";
+        return "home";
     }
+
+    // @GetMapping("/login")
+    // public String login() {
+    // return "login";
+    // }
 
 }

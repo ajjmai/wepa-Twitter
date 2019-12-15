@@ -53,15 +53,15 @@ public class AccountController {
     @PostMapping("/register")
     public String newAccount(@Valid @ModelAttribute("account") Account account, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "index";
+            return "home";
         }
 
         if (accountService.getOneUsername(account.getUsername()) != null) {
-            return "redirect:/index";
+            return "redirect:/home";
         }
 
         accountService.create(account);
-        return "redirect:/index";
+        return "redirect:/home";
     }
 
     @GetMapping("/users")
@@ -108,7 +108,7 @@ public class AccountController {
 
         Account account = accountService.getOneUsername(username);
         if (account == null) {
-            return "redirect:/index";
+            return "redirect:/home";
         }
 
         tweetService.create(content, account);

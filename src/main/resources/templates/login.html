@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="fragments/basic :: head(title='Register to My Twitter')">
+  </head>
+
+  <body>
+    <nav th:replace="fragments/basic :: nav"></nav>
+    <div
+      th:replace="fragments/basic :: header(title='Welcome to Meower!', subtitle='We\'re purrred that you are one of us!')"
+    ></div>
+
+    <div th:replace="fragments/basic :: footer"></div>
+
+    <span th:replace="fragments/basic :: scripts"></span>
+  </body>
+</html>
