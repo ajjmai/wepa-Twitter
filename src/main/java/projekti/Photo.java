@@ -10,6 +10,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class Photo extends AbstractPersistable<Long> {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
+    @Type(type = "org.hiberate.type.BinaryType")
     private byte[] content;
 
     private String description;
