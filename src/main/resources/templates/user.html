@@ -138,7 +138,8 @@
           <ul class="follow" th:each="target: ${user.following} ">
             <a
               th:href="@{/users/{profileString}(profileString=${target.target.profileString}) }"
-              ><li th:text="${target.target.username}">Target</li></a
+              ><li><span th:text="${target.target.username}">Target</span>  <span class="date"
+                th:text="${#temporals.format(target.startedFollowing, 'dd-MM-yyyy')}">Target</span></li></a
             >
           </ul>
 
@@ -146,7 +147,8 @@
           <ul class="follow" th:each="target: ${user.followedBy} ">
             <a
               th:href="@{/users/{profileString}(profileString=${target.follower.profileString}) }"
-              ><li th:text="${target.follower.username}">Followed</li></a
+              ><li><span th:text="${target.follower.username}">Target</span>  <span class="date"
+                th:text="${#temporals.format(target.startedFollowing, 'dd-MM-yyyy')}">Target</span></li></a
             >
           </ul>
         </div>

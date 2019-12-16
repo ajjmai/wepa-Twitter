@@ -36,6 +36,9 @@ public class PhotoController {
     @Autowired
     private PhotoRepository photoRepository;
 
+    @Autowired
+    private FollowRepository followRepository;
+
     @Transactional
     @GetMapping("/users/{profileString}/album")
     public String getPhotos(Model model, @PathVariable String profileString) {
@@ -152,14 +155,23 @@ public class PhotoController {
         }
 
         // no user account found
-        Account account = accountService.getOneUsername(username);
-        if (account == null) {
+        Account auth_account = accountService.getOneUsername(username);
+        if (auth_account == null) {
+            return "redirect:/users/" + profileString + "/album";
+        }
+
+        Account target = accountService.getOneProfileString(profileString);
+        if (target == null) {
+            return "redirect:/users/" + profileString + "/album";
+        }
+
+        if (followRepository.findByFollowerAndTarget(auth_account, target) == null) {
             return "redirect:/users/" + profileString + "/album";
         }
 
         Comment comment = new Comment();
         comment.setContent(content);
-        comment.setOwner(account);
+        comment.setOwner(auth_account);
         comment.setPhoto(photo);
         comment.setPosted(posted);
         commentService.add(comment);

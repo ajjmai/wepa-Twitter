@@ -29,6 +29,9 @@ public class AccountController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Autowired
+    private FollowRepository followRepository;
+
     @ModelAttribute
     private Account getAccount() {
         return new Account();
@@ -170,6 +173,15 @@ public class AccountController {
         // no user account found
         Account auth_account = accountService.getOneUsername(username);
         if (auth_account == null) {
+            return "redirect:/users/" + profileString;
+        }
+
+        Account target = accountService.getOneProfileString(profileString);
+        if (target == null) {
+            return "redirect:/users/" + profileString;
+        }
+
+        if (followRepository.findByFollowerAndTarget(auth_account, target) == null) {
             return "redirect:/users/" + profileString;
         }
 
