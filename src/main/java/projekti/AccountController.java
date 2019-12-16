@@ -71,9 +71,13 @@ public class AccountController {
     // get user profilepage
     @GetMapping("/users/{profileString}")
     public String getOne(Model model, @PathVariable String profileString) {
-        Account account = accountService.getOneProfileString(profileString);
-        model.addAttribute("user", account);
 
+        Account account = accountService.getOneProfileString(profileString);
+        if (account == null) {
+            return "redirect:/home";
+        }
+
+        model.addAttribute("user", account);
         model.addAttribute("tweets", tweetService.get25Tweets(account));
 
         String username = authenticationService.getUsername();
@@ -96,19 +100,26 @@ public class AccountController {
     // create new tweet
     @PostMapping("/users/{profileString}")
     public String newTweet(@RequestParam @NotBlank @Size(max = 160) String content,
-            @RequestParam @NotBlank String username, @PathVariable String profileString) {
+            @PathVariable String profileString) {
 
-        Account account = accountService.getOneUsername(username);
-        if (account == null) {
-            return "redirect:/home";
-        }
-
-        String auth_user_username = authenticationService.getUsername();
-        if (account.getUsername() != auth_user_username) {
+        // user not authenticated
+        String username = authenticationService.getUsername();
+        if (username == null) {
             return "redirect:/users/" + profileString;
         }
 
-        tweetService.create(content, account);
+        // no user account found
+        Account auth_account = accountService.getOneUsername(username);
+        if (auth_account == null) {
+            return "redirect:/users/" + profileString;
+        }
+
+        // cannot tweet on someone else's page
+        if (auth_account.getProfileString().equals(profileString)) {
+            tweetService.create(content, auth_account);
+            return "redirect:/users/" + profileString;
+        }
+
         return "redirect:/users/" + profileString;
     }
 
@@ -125,22 +136,22 @@ public class AccountController {
         }
 
         // no user account found
-        Account account = accountService.getOneUsername(username);
-        if (account == null) {
+        Account auth_account = accountService.getOneUsername(username);
+        if (auth_account == null) {
             return "redirect:/users/" + profileString;
         }
 
         // cannot like one's own tweet
-        if (account.getProfileString() == profileString) {
+        if (auth_account.getProfileString().equals(profileString)) {
             return "redirect:/users/" + profileString;
         }
 
         // already liked this tweet
-        if (tweetService.getVoteOwnerAndTweet(account, tweet) != null) {
+        if (tweetService.getVoteOwnerAndTweet(auth_account, tweet) != null) {
             return "redirect:/users/" + profileString;
         }
 
-        tweetService.likeTweet(tweet, account);
+        tweetService.likeTweet(tweet, auth_account);
 
         return "redirect:/users/" + profileString;
     }
@@ -157,17 +168,12 @@ public class AccountController {
         }
 
         // no user account found
-        Account account = accountService.getOneUsername(username);
-        if (account == null) {
+        Account auth_account = accountService.getOneUsername(username);
+        if (auth_account == null) {
             return "redirect:/users/" + profileString;
         }
 
-        // cannot comment one's own tweet
-        if (account.getProfileString() == profileString) {
-            return "redirect:/users/" + profileString;
-        }
-
-        tweetService.commentTweet(content, id, account);
+        tweetService.commentTweet(content, id, auth_account);
 
         return "redirect:/users/" + profileString;
     }
@@ -182,18 +188,18 @@ public class AccountController {
         }
 
         // no user account found
-        Account account = accountService.getOneUsername(username);
-        if (account == null) {
+        Account auth_account = accountService.getOneUsername(username);
+        if (auth_account == null) {
             return "redirect:/users/" + profileString;
         }
 
         // cannot follow oneself
         Account targetAccount = accountService.getOneProfileString(profileString);
-        if (account.getUsername() == targetAccount.getUsername()) {
+        if (auth_account.getUsername().equals(targetAccount.getUsername())) {
             return "redirect:/users/" + profileString;
         }
 
-        accountService.follow(account, targetAccount);
+        accountService.follow(auth_account, targetAccount);
 
         return "redirect:/users/" + profileString;
     }

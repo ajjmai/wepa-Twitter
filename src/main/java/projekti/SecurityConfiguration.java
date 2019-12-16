@@ -21,13 +21,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    // Development
-    // @Override
-    // public void configure(WebSecurity sec) throws Exception {
-    // // Pyyntöjä ei tarkasteta
-    // sec.ignoring().antMatchers("/**");
-    // }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
@@ -40,13 +33,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/home");
 
     }
-
-    // @Override
-    // protected void configure(AuthenticationManagerBuilder auth) throws Exception
-    // {
-    // auth.inMemoryAuthentication().withUser("testi").password("kilpikonna").authorities("USER").and()
-    // .withUser("admin").password("kilpikonna").authorities("ADMIN");
-    // }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

@@ -33,7 +33,7 @@
         <div
           th:each="photo: ${photos}"
           class="card"
-          style="max-width: 40%; min-width: 20%;"
+          style="max-width: 60%; min-width: 40%; margin-bottom: 2%;"
         >
           <img
             class="card-img-top"
@@ -101,18 +101,14 @@
               <button class="btn " type="submit">
                 Make profilepic
               </button>
-            </form>
+            <!-- </form>
 
-            <!-- <form
-              th:action="@{/users/{profileString}/album/{id}/delete(profileString=${user.profileString}, id=${photo.id} ) }"
-              method="DELETE"
+            <form
+              th:action="@{/users/{profileString}/album/{id}(profileString=${user.profileString}, id=${photo.id} ) }"
+              method="POST"
             >
               <input type="hidden" name="id" th:value="${photo.id}" />
-              <button
-                class="btn "
-                type="submit"
-                onClick="return confirm('Are you sure?')"
-              >
+              <button class="btn" type="submit">
                 Delete
               </button>
             </form> -->
@@ -124,7 +120,7 @@
     <div class="container w60-c" sec:authorize="isAuthenticated()">
       <h2>Add photo</h2>
       <form
-        th:action="@{/users/${user.profileString}/album}"
+        th:action="@{/users/{profileString}/album(profileString=${user.profileString})}"
         method="POST"
         enctype="multipart/form-data"
       >
@@ -141,15 +137,6 @@
             required
           />
         </div>
-        <div class="form-group">
-          <input
-            class="form-control"
-            type="hidden"
-            name="username"
-            th:value="${user.username}"
-          />
-        </div>
-
         <button type="submit" class="btn">Add</button>
       </form>
     </div>

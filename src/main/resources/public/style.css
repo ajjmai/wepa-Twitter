@@ -13,11 +13,11 @@
 
 .card-header {
   background-color: midnightblue;
-  opacity: 0.7;
+  opacity: 0.9;
 }
 
 .card .btn {
-  opacity: 0.7;
+  opacity: 0.9;
 }
 
 .card-header a,
