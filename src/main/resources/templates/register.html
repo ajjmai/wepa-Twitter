@@ -34,7 +34,7 @@
             </div>
             <div class="form-group">
                 <label for="profileString">
-                    Your home page address, your home page will be in www.myTwitter.com/users/[your address]:
+                    Your home page address, your home page will be in www.meower.meow/users/[your address]:
                 </label> 
                 <input type="text" class="form-control" th:field="*{profileString}" placeholder="Enter home page address" required/>
                 <p th:if="${#fields.hasErrors('profileString')}" th:errors="*{profileString}">Profilestring error</p>
