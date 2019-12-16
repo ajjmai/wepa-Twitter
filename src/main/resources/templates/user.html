@@ -64,7 +64,7 @@
     <!-- tweets -->
     <div class="container w60-c">
       <div class="row">
-        <div class="col-10 card-deck">
+        <div class="col-9 card-deck">
           <div
             class="card"
             th:each="tweet: ${tweets}"
@@ -133,23 +133,33 @@
             </div>
           </div>
         </div>
-        <div class="col-2">
+        <div class="col-3">
           <h3>Following</h3>
           <ul class="follow" th:each="target: ${user.following} ">
             <a
               th:href="@{/users/{profileString}(profileString=${target.target.profileString}) }"
-              ><li><span th:text="${target.target.username}">Target</span>  <span class="date"
-                th:text="${#temporals.format(target.startedFollowing, 'dd-MM-yyyy')}">Target</span></li></a
-            >
+              ><li>
+                <span th:text="${target.target.username}">Target</span></a>
+                <span
+                  class="date" style="font-size: x-small;"
+                  th:text="${#temporals.format(target.startedFollowing, 'dd-MM-yyyy')}"
+                  >Target</span
+                >
+              </li>
           </ul>
 
           <h3>Followers</h3>
           <ul class="follow" th:each="target: ${user.followedBy} ">
             <a
               th:href="@{/users/{profileString}(profileString=${target.follower.profileString}) }"
-              ><li><span th:text="${target.follower.username}">Target</span>  <span class="date"
-                th:text="${#temporals.format(target.startedFollowing, 'dd-MM-yyyy')}">Target</span></li></a
-            >
+              ><li>
+                <span th:text="${target.follower.username}">Target</span></a>
+                <span
+                  class="date" style="font-size: x-small;"
+                  th:text="${#temporals.format(target.startedFollowing, 'dd-MM-yyyy')}"
+                  >Target</span
+                >
+              </li>
           </ul>
         </div>
       </div>

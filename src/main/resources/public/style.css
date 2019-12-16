@@ -87,6 +87,7 @@
 .follow a {
   list-style-type: none;
   color: midnightblue;
+  padding-left: 0;
 }
 
 .jumbotron {
