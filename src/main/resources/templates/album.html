@@ -43,12 +43,15 @@
           <div class="card-body">
             <p class="card-text" th:text="${photo.description}">description</p>
             <form
-              sec:authorize="isAuthenticated()"
               th:action="@{/users/{profileString}/album/like(profileString=${user.profileString}) }"
               method="POST"
             >
               <input type="hidden" name="id" th:value="${photo.id}" />
-              <button type="submit" class="btn btn-purr">
+              <button
+                sec:authorize="isAuthenticated()"
+                type="submit"
+                class="btn btn-purr"
+              >
                 Purr
               </button>
               <span th:text="${photo.likesCount}">Likes amount</span>

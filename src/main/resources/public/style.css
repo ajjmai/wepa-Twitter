@@ -71,6 +71,10 @@
   max-width: 80%;
 }
 
+.avatar {
+  width: 100%;
+}
+
 .w80-c {
   max-width: 80%;
   align-content: center;
